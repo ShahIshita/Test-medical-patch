@@ -1,0 +1,44 @@
+{
+  "name": "vuetify3",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "@mdi/font": "7.0.96",
+    "apexcharts": "^3.44.1",
+    "axios": "^1.6.2",
+    "chart.js": "^3.9.1",
+    "chartjs-adapter-moment": "^1.0.1",
+    "chartjs-plugin-streaming": "^2.0.0",
+    "chartjs-plugin-zoom": "^2.0.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "mqtt": "^5.3.1",
+    "prettier": "^3.1.0",
+    "register-service-worker": "^1.7.2",
+    "roboto-fontface": "*",
+    "vue": "^3.2.0",
+    "vue-apexcharts": "^1.6.2",
+    "vue-chart-3": "^3.1.8",
+    "vue-router": "^4.2.5",
+    "vue3-apexcharts": "^1.4.4",
+    "vue3-tel-input": "^1.0.4",
+    "vue3-toastify": "^0.1.14",
+    "vuetify": "^3.0.0",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "eslint": "^8.22.0",
+    "eslint-plugin-vue": "^9.3.0",
+    "sass": "^1.69.5",
+    "sass-loader": "^13.3.2",
+    "unplugin-fonts": "^1.0.3",
+    "vite": "^4.2.0",
+    "vite-plugin-vuetify": "^1.0.0"
+  }
+}
