@@ -44,7 +44,7 @@ const mutations = {
     state.loading = loadingStatus;
   },
 
-  SET_PATIENTS_FOR_DOCTOR(data) {
+  SET_PATIENTS_FOR_DOCTOR(state, data) {
     state.deviceData = data.map((item) => ({
       id: item._id,
       firstName:
@@ -176,6 +176,7 @@ const mutations = {
 const actions = {
   async getPatientsForDoctor({ commit }, id) {
     commit("SET_LOADING_STATUS", true);
+    console.log(id);
     const res = await doctors.getAllDevicesOfDoctor(id);
     if (res.status === 200) {
       commit("SET_PATIENTS_FOR_DOCTOR", res.data.data);

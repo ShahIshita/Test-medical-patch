@@ -1,7 +1,12 @@
 <script setup>
-import { defineEmits } from "vue";
+import { defineEmits, defineProps } from "vue";
 
 const emit = defineEmits(["goBack", "addNewPatient"]);
+const props = defineProps({
+  pageIcon: String,
+  btnName: String,
+  title: String,
+});
 
 const role = localStorage.getItem("role");
 
@@ -16,20 +21,23 @@ const addNewPatient = () => {
 
 <template>
   <div class="d-flex mr-auto align-center">
-    <v-icon v-if="pageIcon" class="black--text icon-big" @click="goBack">{{
-      pageIcon
-    }}</v-icon>
+    <v-icon
+      v-if="props.pageIcon"
+      class="black--text icon-big"
+      @click="goBack"
+      >{{ props.pageIcon }}</v-icon
+    >
     <v-card-title class="font-weight-bold pl-0">
-      {{ title }}
+      {{ props.title }}
     </v-card-title>
     <v-btn
       class="align-self-center ml-auto"
       :color="colorName"
       rounded
       @click="addNewPatient"
-      v-if="btnName && (role === 'Doctor' || role === 'Admin')"
+      v-if="props.btnName && (role === 'Doctor' || role === 'Admin')"
     >
-      <span v-if="btnName">{{ btnName }}</span>
+      <span v-if="props.btnName">{{ props.btnName }}</span>
     </v-btn>
   </div>
 </template>

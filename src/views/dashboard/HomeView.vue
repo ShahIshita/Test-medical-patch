@@ -3,6 +3,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import PageHeader from "@/layouts/PageHeader.vue";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
+import { useDisplay } from "vuetify";
 
 const store = useStore();
 
@@ -10,10 +11,13 @@ const getDoctorId = localStorage.getItem("user_id");
 const gridNumber = ref(4);
 // const realTimeMessage = ref("Offline");
 
-const { loadingStatus, filteredPatients } = store.getters["doctors"];
+const loadingStatus = store.getters.loadingStatus;
+const filteredPatients = store.getters.filteredPatients;
+
+const { lgAndUp } = useDisplay();
 
 const showGrid = computed(() => `lg${gridNumber.value}`);
-const mobile = computed(() => store.state.$vuetify.breakpoint.lgAndUp);
+const mobile = computed(() => store.state.lgAndUp);
 
 const getPatientsForDoctor = () => {
   if (getDoctorId) {
@@ -67,8 +71,8 @@ onMounted(getPatientsForDoctor);
     ></v-progress-circular>
 
     <div v-else>
-      <v-layout row wrap class="card-item-row">
-        <v-flex
+      <v-row row wrap class="card-item-row">
+        <v-col
           d-flex
           xs12
           sm6
@@ -322,8 +326,8 @@ onMounted(getPatientsForDoctor);
               </div>
             </div>
           </v-card>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </div>
 
     <div v-if="!$store.state.doctors.deviceData" class="display-1">

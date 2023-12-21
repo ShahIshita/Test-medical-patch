@@ -19,19 +19,19 @@
               contain
             />
             <div class="text-start mt-n5 mb-15">
-              <v-flex d-flex md10>
+              <v-col d-flex md10>
                 <h1>
                   Sneak Peek <br />
                   Into Health
                 </h1>
-              </v-flex>
-              <v-flex md12>
+              </v-col>
+              <v-col md12>
                 <p class="mt-5 my-md-10 ml-sm-0">
                   Get access to essential health data that aids in taking
                   crucial decisions for life. Track vital information in a
                   graphical view and hasten the next step.
                 </p>
-              </v-flex>
+              </v-col>
               <div class="box-item-row">
                 <div class="mini-box-item">
                   <div class="item">

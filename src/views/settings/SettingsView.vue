@@ -19,8 +19,8 @@ const radioHeight = ref("cm");
     />
     <br />
     <div>
-      <v-layout row wrap>
-        <v-flex d-flex xs12 sm12 md6 class="mt-2">
+      <v-row row wrap>
+        <v-col d-flex xs12 sm12 md6 class="mt-2">
           <v-card>
             <v-card-title
               class="text-left text-h7 font-weight-bold pb-0"
@@ -40,16 +40,16 @@ const radioHeight = ref("cm");
                 inset
               ></v-switch>
             </div>
-            <v-flex class="text-start pl-4 pr-4">
+            <v-col class="text-start pl-4 pr-4">
               <p>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna.
               </p>
-            </v-flex>
+            </v-col>
           </v-card>
-        </v-flex>
+        </v-col>
 
-        <v-flex d-flex xs12 sm12 md6 class="mt-2">
+        <v-col d-flex xs12 sm12 md6 class="mt-2">
           <v-card>
             <v-card-title
               class="text-left text-h7 font-weight-bold pb-0"
@@ -60,12 +60,12 @@ const radioHeight = ref("cm");
             <v-card-title class="font-weight-medium card__title text-h7 pb-0"
               >Start of the week</v-card-title
             >
-            <v-flex class="text-start pl-4 pr-4">
+            <v-col class="text-start pl-4 pr-4">
               <p class="mb-0">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt ut labore et dolore magna.
               </p>
-            </v-flex>
+            </v-col>
 
             <v-radio-group v-model="radioDays" row class="ml-3 mt-1">
               <v-radio value="monday" color="warning">
@@ -85,9 +85,9 @@ const radioHeight = ref("cm");
               </v-radio>
             </v-radio-group>
           </v-card>
-        </v-flex>
+        </v-col>
 
-        <v-flex d-flex xs12 sm12 md6 class="mt-2 mb-4">
+        <v-col d-flex xs12 sm12 md6 class="mt-2 mb-4">
           <v-card>
             <v-card-title
               class="text-left text-h7 font-weight-bold pb-0"
@@ -98,12 +98,12 @@ const radioHeight = ref("cm");
             <v-card-title class="font-weight-medium card__title text-h7 pb-0"
               >Measurements</v-card-title
             >
-            <v-flex class="text-start pl-4 pr-4">
+            <v-col class="text-start pl-4 pr-4">
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
                 numquam!
               </p>
-            </v-flex>
+            </v-col>
 
             <div class="d-flex align-center">
               <v-card-title class="font-weight-bold card__title text-h6"
@@ -151,9 +151,9 @@ const radioHeight = ref("cm");
               </v-radio-group>
             </div>
           </v-card>
-        </v-flex>
+        </v-col>
 
-        <v-flex d-flex xs12 sm12 md6 class="mt-2 mb-4">
+        <v-col d-flex xs12 sm12 md6 class="mt-2 mb-4">
           <v-card>
             <v-card-title
               class="text-left text-h7 font-weight-bold pb-0"
@@ -174,12 +174,12 @@ const radioHeight = ref("cm");
               ></v-switch>
             </div>
 
-            <v-flex class="text-start pl-4 pr-4">
+            <v-col class="text-start pl-4 pr-4">
               <p>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy.
               </p>
-            </v-flex>
+            </v-col>
 
             <div class="d-flex justify-center">
               <v-card-title class="font-weight-bold card__title text-h6"
@@ -194,15 +194,15 @@ const radioHeight = ref("cm");
               ></v-switch>
             </div>
 
-            <v-flex class="text-start pl-4 pr-4">
+            <v-col class="text-start pl-4 pr-4">
               <p>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy.
               </p>
-            </v-flex>
+            </v-col>
           </v-card>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
