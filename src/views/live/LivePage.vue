@@ -4,6 +4,8 @@ import { useStore } from "vuex";
 import mqtt from "mqtt/dist/mqtt";
 import PageHeader from "@/layouts/PageHeader.vue";
 import EcgChart from "@/components/EcgChart.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const getDoctorId = localStorage.getItem("user_id");
 const gridNumber = ref(6);
@@ -38,7 +40,7 @@ const initData = () => {
 };
 
 // const goToPreviousPage = () => {
-//   $router.go(-1);
+//   router.go(-1);
 // };
 
 onMounted(() => {
@@ -86,7 +88,7 @@ watch(
           console.log("Connection succeeded!");
           subscribeSuccess.value = true;
           socketConnection.value.subscribe(
-            `BacAccuLive/${element.macAddressFramed.toUpperCase()}/atoc`,
+            `BacAccuLive/${element.macAddressFramed.toUpperCase()}/atoc`
           );
         });
       }
@@ -100,10 +102,7 @@ watch(
         let data = await JSON.parse(message);
         if (data?.msg_id === 17) {
           liveDevices.value = liveDevices.value.map((device) => {
-            if (
-              device.macAddressFramed ===
-              data.mac_address_framed.replaceAll(":", "")
-            ) {
+            if (device.macAddressFramed === data.mac_address_framed.replaceAll(":", "")) {
               device["algodata"] = data;
               return device;
             }
@@ -113,10 +112,7 @@ watch(
         console.log("data--", JSON.parse(message));
         if (data?.ecg_vals) {
           liveDevices.value = liveDevices.value.map((device) => {
-            if (
-              device.macAddressFramed ===
-              data.mac_address_framed.replaceAll(":", "")
-            ) {
+            if (device.macAddressFramed === data.mac_address_framed.replaceAll(":", "")) {
               device.showEcgChart = true;
               device["ecgValues"] = data?.ecg_vals;
               device["allEcgValues"].push(data?.ecg_vals);
@@ -127,7 +123,7 @@ watch(
         }
       });
     }
-  },
+  }
 );
 </script>
 
@@ -137,7 +133,7 @@ watch(
       class="mb-8"
       title="Live"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
     />
     <div class="btn-group" v-if="mobile">
       <h3>Filter</h3>
@@ -176,7 +172,7 @@ watch(
         <v-card
           class="card-theme"
           style="width: 100%; border-radius: 20px"
-          @click="$router.push(`/patient-details/${device?.id}`)"
+          @click="router.push(`/patient-details/${device?.id}`)"
         >
           <div class="d-flex align-center w-100">
             <div class="d-flex flex-column text-start w-100">

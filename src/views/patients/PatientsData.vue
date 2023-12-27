@@ -8,11 +8,15 @@ import ConfirmDialog from "../../components/ConfirmDialog.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const store = useStore();
 const data = ref(null);
 const getDoctorId = localStorage.getItem("user_id");
 const role = localStorage.getItem("role");
-const { getAllPatientsOnly, loadingStatus, getAllPatientsData, deletePatient } =
-  useStore("doctors");
+
+const loadingStatus = store.getters.loadingStatus;
+const getAllPatientsOnly = store.getters.getAllPatientsOnly;
+const getAllPatientsData = store.dispatch("doctors/getAllPatientsData");
+const deletePatient = store.dispatch("doctors/deletePatient");
 
 const headers = [
   {
@@ -38,11 +42,7 @@ const addPatient = () => {
 };
 
 const deleteSinglePatient = async (item) => {
-  if (
-    await data.value.confirm.open(
-      "Are you sure you want to delete this patient?",
-    )
-  ) {
+  if (await data.value.confirm.open("Are you sure you want to delete this patient?")) {
     try {
       const data = await deletePatient(item);
       if (data.statusCode === 200) {
@@ -73,7 +73,7 @@ onMounted(() => {
     <PageHeader
       title="Patients"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
       btnName="Add Patient"
       color-name="warning"
       @addNewPatient="addPatient"
@@ -87,7 +87,7 @@ onMounted(() => {
         :items="getAllPatientsOnly"
         :items-per-page="5"
         :search="searchUserString"
-        :custom-filter="searchUser"
+        :custom-filter="useSearch"
         class="elevation-1 table text-capitalize"
       >
         <template v-slot:top>
@@ -111,14 +111,14 @@ onMounted(() => {
         <template v-slot:[`item.actions`]="{ item }">
           <button
             class="btn btn-orange"
-            @click="$router.push(`/patients/patient/${item.id}`)"
+            @click="router.push(`/patients/patient/${item.id}`)"
           >
             <v-icon color="white" size="22"> mdi-eye </v-icon>
           </button>
           <button
             class="btn btn-info"
             v-if="role === 'Doctor'"
-            @click="$router.push(`/edit-patient/${item.id}`)"
+            @click="router.push(`/edit-patient/${item.id}`)"
           >
             <v-icon size="22" color="white">mdi-pencil</v-icon>
           </button>

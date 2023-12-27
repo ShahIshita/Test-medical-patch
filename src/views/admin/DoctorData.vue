@@ -3,10 +3,11 @@ import { ref, onMounted } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { useStore } from "vuex";
+import PageHeader from "@/layouts/PageHeader.vue";
 import ConfirmDialog from "../../components/ConfirmDialog.vue";
 import useSearch from "@/composable/searchUser";
 
-const { searchUserString, searchUser } = useSearch();
+const { searchUserString } = useSearch();
 
 const getAdminId = localStorage.getItem("user_id");
 const role = localStorage.getItem("role");
@@ -23,11 +24,13 @@ const headers = ref([
 const dataConfirm = ref(null);
 const dialogDelete = ref(false);
 
-const { getAllPatientsData, deletePatient } = store.dispatch("doctors", [
-  "getAllPatientsData",
-  "deletePatient",
-]);
+const loadingStatus = store.getters.loadingStatus;
+const getAllDoctorsOnly = store.getters.getAllDoctorsOnly;
 
+const getAllData = () => {
+  store.dispatch.getAllPatientsData;
+  store.dispatch.deletePatient;
+};
 const deleteSingleDoctor = async (item) => {
   if (await confirmDelete()) {
     try {
@@ -52,12 +55,12 @@ const deleteSingleDoctor = async (item) => {
 
 const confirmDelete = async () => {
   return await dataConfirm.value.confirm.open(
-    "Are you sure you want to delete this doctor?",
+    "Are you sure you want to delete this doctor?"
   );
 };
 
-onMounted(() => {
-  getAllPatientsData(getAdminId);
+onMounted(async () => {
+  await getAllData();
 });
 </script>
 
@@ -66,10 +69,10 @@ onMounted(() => {
     <PageHeader
       title="Doctors"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
       btnName="Add Doctor"
       color-name="warning"
-      @addNewPatient="$router.push('add-doctor')"
+      @addNewPatient="router.push('add-doctor')"
     />
     <br />
     <div class="table-changes">
@@ -80,7 +83,7 @@ onMounted(() => {
         :items="getAllDoctorsOnly"
         :items-per-page="5"
         :search="searchUserString"
-        :custom-filter="searchUser"
+        :custom-filter="useSearch"
         class="elevation-1 table text-capitalize"
       >
         <template v-slot:top>
@@ -102,16 +105,13 @@ onMounted(() => {
           ></v-img>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
-          <button
-            class="btn btn-orange"
-            @click="$router.push(`/doctors/${item.id}`)"
-          >
+          <button class="btn btn-orange" @click="router.push(`/doctors/${item.id}`)">
             <v-icon color="white" size="22"> mdi-eye </v-icon>
           </button>
           <!-- <button
             class="btn btn-info"
             v-if="role === 'Doctor'"
-            @click="$router.push(`/edit-patient/${item.id}`)"
+            @click="router.push(`/edit-patient/${item.id}`)"
           >
             <v-icon size="22" color="white">mdi-pencil</v-icon>
           </button> -->

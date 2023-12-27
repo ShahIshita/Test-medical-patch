@@ -3,7 +3,7 @@
     <PageHeader
       title="Patient Details"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
     />
     <br />
     <div class="patient-details-wrapper">
@@ -29,7 +29,7 @@
             >
               {{ getSingleDeviceData[0]?.customerFullName }}
             </h3>
-            <button class="btn-orange mr-4" @click="$router.push('/settings')">
+            <button class="btn-orange mr-4" @click="router.push('/settings')">
               <v-icon>mdi-cog</v-icon>
             </button>
           </div>
@@ -57,12 +57,7 @@
               </h3>
             </div>
             <div class="item">
-              <img
-                src="@/assets/macAddress.svg"
-                height="20"
-                width="20"
-                contain
-              />
+              <img src="@/assets/macAddress.svg" height="20" width="20" contain />
               <h3
                 class="ml-3 font-weight-regular"
                 :style="{
@@ -90,10 +85,7 @@
             </div>
           </div>
           <div class="d-flex align-center device-status-row">
-            <h3
-              class="mr-5 font-weight-medium green--text"
-              style="font-size: 20px"
-            >
+            <h3 class="mr-5 font-weight-medium green--text" style="font-size: 20px">
               Device Status
             </h3>
             <!-- <v-switch
@@ -155,9 +147,7 @@
               >
                 <ecg-chart
                   :ecgDataFromProps="ecgChartData"
-                  :macAddress="
-                    getSingleDeviceData[0]?.macAddressFramed.toUpperCase()
-                  "
+                  :macAddress="getSingleDeviceData[0]?.macAddressFramed.toUpperCase()"
                   :key="showEcgChart"
                   v-if="showEcgChart"
                   :width="834.24"
@@ -194,13 +184,7 @@
               <v-flex xs12>
                 <div class="text-medium">
                   <h1 class="text-success">
-                    {{
-                      algoData?.hr
-                        ? algoData?.hr != 0
-                          ? algoData.hr
-                          : "--"
-                        : "--"
-                    }}
+                    {{ algoData?.hr ? (algoData?.hr != 0 ? algoData.hr : "--") : "--" }}
                   </h1>
                   <small>BPM</small>
                 </div>
@@ -224,12 +208,7 @@
             </div>
             <div class="d-flex justify-center align-center mt-5">
               <v-flex>
-                <v-img
-                  src="@/assets/oxygen.svg"
-                  height="70"
-                  width="70"
-                  contain
-                ></v-img>
+                <v-img src="@/assets/oxygen.svg" height="70" width="70" contain></v-img>
               </v-flex>
               <v-flex xs12>
                 <div class="text-medium">
@@ -275,11 +254,7 @@
                 <div class="text-medium">
                   <h1 class="text-danger">
                     {{
-                      algoData?.temp
-                        ? algoData?.temp != 0
-                          ? algoData.temp
-                          : "--"
-                        : "--"
+                      algoData?.temp ? (algoData?.temp != 0 ? algoData.temp : "--") : "--"
                     }}
                   </h1>
                   <small>°C</small>
@@ -474,12 +449,7 @@
             </div>
             <div class="d-flex justify-center align-center mt-5">
               <v-flex>
-                <v-img
-                  src="@/assets/steps.svg"
-                  height="70"
-                  width="70"
-                  contain
-                ></v-img>
+                <v-img src="@/assets/steps.svg" height="70" width="70" contain></v-img>
               </v-flex>
               <v-flex xs12>
                 <div class="text-medium">
@@ -802,11 +772,7 @@
               >
             </div>
             <div class="grid-container w-100">
-              <div
-                id="barCanvas"
-                class="mt-5"
-                style="width: 100%; overflow-x: auto"
-              >
+              <div id="barCanvas" class="mt-5" style="width: 100%; overflow-x: auto">
                 <div
                   :id="`temp-${getSingleDeviceData[0]?.macAddressFramed.toUpperCase()}`"
                   class="grid-container"
@@ -815,9 +781,7 @@
                     v-if="getBodyTempGraphData.length"
                     :key="getBodyTempGraphData.length"
                     :temprature-data="getBodyTempGraphData"
-                    :macAddress="
-                      getSingleDeviceData[0]?.macAddressFramed.toUpperCase()
-                    "
+                    :macAddress="getSingleDeviceData[0]?.macAddressFramed.toUpperCase()"
                     :height="286"
                     :width="623"
                     :chart-bg-color="'#fd5d5d'"
@@ -840,9 +804,7 @@
                 ></v-img>
                 <div class="d-flex ml-5 text-start flex-column">
                   <span>Blood Oxygen</span>
-                  <span class="warning--text" style="font-size: 16px"
-                    >mmHg</span
-                  >
+                  <span class="warning--text" style="font-size: 16px">mmHg</span>
                 </div>
               </h3>
               <v-spacer></v-spacer>
@@ -861,15 +823,7 @@
                 :width="770"
                 :data-of-chart="getBloodOxygenGraphData"
                 :chart-id="'OxygenGraph'"
-                :chart-label="[
-                  '12pm',
-                  '1pm',
-                  '2pm',
-                  '3pm',
-                  '4pm',
-                  '5pm',
-                  '6pm',
-                ]"
+                :chart-label="['12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm']"
                 :chart-border-color="'#774af1'"
                 :chart-bg-color="['#7741f1']"
               />
@@ -910,9 +864,7 @@
                   v-if="getHeartRateGraphData.length"
                   :key="getHeartRateGraphData.length"
                   :heartrate-data="getHeartRateGraphData"
-                  :macAddress="
-                    getSingleDeviceData[0]?.macAddressFramed.toUpperCase()
-                  "
+                  :macAddress="getSingleDeviceData[0]?.macAddressFramed.toUpperCase()"
                   :height="286"
                   :width="623"
                   :chart-bg-color="'cyan'"
@@ -927,12 +879,7 @@
             <div class="w-100 d-flex justify-center align-center">
               <h3 class="d-flex align-center">
                 <span>
-                  <v-img
-                    src="@/assets/steps.svg"
-                    height="50"
-                    width="50"
-                    contain
-                  ></v-img>
+                  <v-img src="@/assets/steps.svg" height="50" width="50" contain></v-img>
                 </span>
                 <div class="d-flex ml-5 text-start flex-column">
                   <span>Steps</span>
@@ -942,11 +889,7 @@
                 </div>
               </h3>
               <v-spacer></v-spacer>
-              <v-btn
-                class="export__btn"
-                color="warning"
-                outlined
-                @click="exportStepsData"
+              <v-btn class="export__btn" color="warning" outlined @click="exportStepsData"
                 >Export</v-btn
               >
             </div>
@@ -957,15 +900,7 @@
                 :width="770"
                 :data-of-chart="getPatientSteps"
                 :chart-id="'stepsGraph'"
-                :chart-label="[
-                  '12pm',
-                  '1pm',
-                  '2pm',
-                  '3pm',
-                  '4pm',
-                  '5pm',
-                  '6pm',
-                ]"
+                :chart-label="['12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm']"
                 :chart-border-color="'cyan'"
                 :chart-bg-color="['cyan']"
               />
@@ -982,9 +917,7 @@
       v-model="showExportECGDateModel"
     >
       <v-card class="pa-sm-10 pa-5">
-        <h4 class="text-h6 font-weight-bold mb-5">
-          Select date to export ECG data
-        </h4>
+        <h4 class="text-h6 font-weight-bold mb-5">Select date to export ECG data</h4>
         <v-row>
           <v-col cols="12" sm="12" md="12" class="mb-3">
             <v-menu
@@ -1055,14 +988,7 @@
 </template>
 
 <script setup>
-import {
-  ref,
-  onMounted,
-  onBeforeUnmount,
-  computed,
-  watch,
-  nextTick,
-} from "vue";
+import { ref, onMounted, onBeforeUnmount, computed, watch, nextTick } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { useStore } from "vuex";
@@ -1075,9 +1001,11 @@ import TempratureGraph from "@/components/TempratureGraph.vue";
 import moment from "moment";
 import StepsChart from "@/components/StepsChart.vue";
 import _ from "lodash";
-import { useRoute } from "vue-router";
-const route = useRoute();
+
 import { useDisplay } from "vuetify";
+import { useRoute, useRouter } from "vue-router";
+const router = useRouter();
+const route = useRoute();
 
 const display = ref(useDisplay());
 
@@ -1117,7 +1045,7 @@ const ecgChartData = ref([]);
 const ppgChartData = ref([]);
 const startDateMenu = ref(false);
 const startDateValue = ref(
-  new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+  new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10)
 );
 const endDateValue = ref(null);
 const tempStartTime = ref(null);
@@ -1158,19 +1086,15 @@ const BloodOxygenGraphData = ref();
 const { getters, dispatch } = this.$store;
 const { params } = this.route;
 
-const getSingleDeviceData = computed(
-  () => getters["doctors/getSingleDeviceData"],
-);
+const getSingleDeviceData = computed(() => getters["doctors/getSingleDeviceData"]);
 const getMacAddress = computed(() => getters["doctors/getMacAddress"]);
 const getBloodOxygenGraphData = computed(
-  () => getters["patientData/getBloodOxygenGraphData"],
+  () => getters["patientData/getBloodOxygenGraphData"]
 );
-const getBodyTempGraphData = computed(
-  () => getters["patientData/getBodyTempGraphData"],
-);
+const getBodyTempGraphData = computed(() => getters["patientData/getBodyTempGraphData"]);
 const getPatientSteps = computed(() => getters["patientData/getPatientSteps"]);
 const getHeartRateGraphData = computed(
-  () => getters["patientData/getHeartRateGraphData"],
+  () => getters["patientData/getHeartRateGraphData"]
 );
 
 // Computed properties using Composition API
@@ -1211,19 +1135,14 @@ onBeforeUnmount(() => {
 watch(
   () => getMacAddress.value,
   (val) => {
-    if (
-      val &&
-      startDateValue.value &&
-      endDateValue.value &&
-      selectedTimePeriod.value
-    ) {
+    if (val && startDateValue.value && endDateValue.value && selectedTimePeriod.value) {
       displayAlgoData();
       getBodyTempGraph();
       getBloodO2Graph();
       getStepsGraph();
       getHeartRateGraph();
     }
-  },
+  }
 );
 
 watch(() => startDateValue.value, {
@@ -1267,7 +1186,7 @@ watch(
       getStepsGraph();
       getHeartRateGraph();
     }
-  },
+  }
 );
 
 watch(() => getSingleDeviceData.value, {
@@ -1293,10 +1212,7 @@ onBeforeUnmount(() => {
 
 const downloadEcgData = async () => {
   try {
-    let endDate = new Date(exportECGDate.value)
-      .addDays(1)
-      .toISOString()
-      .slice(0, 10);
+    let endDate = new Date(exportECGDate.value).addDays(1).toISOString().slice(0, 10);
 
     const payload = {
       mac_address_framed: getMacAddress.value.toString().toUpperCase(),
@@ -1311,7 +1227,7 @@ const downloadEcgData = async () => {
       // Assuming that $toast is a ref
       toast.error(
         `ECG data for ${exportECGDate.value} not available. Please select another date.`,
-        { timeout: 3000 },
+        { timeout: 3000 }
       );
       isLoading.value = false;
       return;
@@ -1339,12 +1255,9 @@ const downloadEcgData = async () => {
     anchor.click();
 
     // Assuming that $toast is a ref
-    toast.success(
-      `ECG data for ${exportECGDate.value} exported successfully.`,
-      {
-        timeout: 3000,
-      },
-    );
+    toast.success(`ECG data for ${exportECGDate.value} exported successfully.`, {
+      timeout: 3000,
+    });
 
     showExportECGDateModel.value = false;
     isLoading.value = false;
@@ -1451,13 +1364,7 @@ const exportBloodOxygenData = () => {
       let updatedDate = new Date(data.date).toLocaleDateString();
       let updatedTime = new Date(data.date).toLocaleTimeString();
       let row =
-        updatedDate +
-        "," +
-        updatedTime +
-        "," +
-        Math.round(data.spo2) +
-        " %" +
-        "\n";
+        updatedDate + "," + updatedTime + "," + Math.round(data.spo2) + " %" + "\n";
       csv += row;
     });
 
@@ -1507,8 +1414,7 @@ const exportStepsData = () => {
     stepsData.forEach((data) => {
       let updatedDate = new Date(data.date).toLocaleDateString();
       let updatedTime = new Date(data.date).toLocaleTimeString();
-      let row =
-        updatedDate + "," + updatedTime + "," + Math.round(data.step) + "\n";
+      let row = updatedDate + "," + updatedTime + "," + Math.round(data.step) + "\n";
       csv += row;
     });
 
@@ -1620,7 +1526,7 @@ const createConnection = () => {
         console.log("Connection succeeded!");
         subscribeSuccess.value = true;
         client.subscribe(
-          `BacAccuLive/${getSingleDeviceData.value[0]?.macAddressFramed.toUpperCase()}/atoc`,
+          `BacAccuLive/${getSingleDeviceData.value[0]?.macAddressFramed.toUpperCase()}/atoc`
         );
       });
 
@@ -1634,10 +1540,7 @@ const createConnection = () => {
         ecgChartData.value = [];
         ppgChartData.value = [];
 
-        if (
-          message.toString() === "Online" ||
-          message.toString() === "Offline"
-        ) {
+        if (message.toString() === "Online" || message.toString() === "Offline") {
           liveMessage.value = message.toString();
         } else {
           let data = await JSON.parse(message);
@@ -1647,12 +1550,9 @@ const createConnection = () => {
 
           console.log("data--", JSON.parse(message));
           tempStartTime.value = data?.start_time;
-          startTime.value = new Date(tempStartTime.value).toLocaleString(
-            undefined,
-            {
-              timeZone: "Asia/Kolkata",
-            },
-          );
+          startTime.value = new Date(tempStartTime.value).toLocaleString(undefined, {
+            timeZone: "Asia/Kolkata",
+          });
 
           if (data?.ecg_vals || data?.ppg_vals) {
             nextTick(() => {

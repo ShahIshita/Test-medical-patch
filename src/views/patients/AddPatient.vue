@@ -2,12 +2,13 @@
 import { ref } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { mapActions } from "vuex";
 import PageHeader from "@/layouts/PageHeader.vue";
 import CustomTextField from "@/components/CustomTextField.vue";
 import { useRouter } from "vue-router";
-
+import { useStore } from "vuex";
 const router = useRouter();
+const store = useStore();
+const { addUser } = store.dispatch("userManagement", ["addUser"]);
 
 // const toast = Toast.useToast();
 
@@ -32,8 +33,7 @@ const passwordRules = [
 ];
 const aadharRules = [
   (v) => !!v || "Aadhar Number is required",
-  (v) =>
-    /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/.test(v) || "Aadhar Number is invalid",
+  (v) => /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/.test(v) || "Aadhar Number is invalid",
 ];
 const memberNameRules = [(v) => !!v || "Member name is required"];
 const memberRelationRules = [(v) => !!v || "Member Relation is required."];
@@ -116,9 +116,7 @@ const user = ref({
   obesity: null,
 });
 
-const familyMemberInfo = ref([
-  { name: "", selectedRelation: "", contactNo: null },
-]);
+const familyMemberInfo = ref([{ name: "", selectedRelation: "", contactNo: null }]);
 
 const medicalInfo = ref({
   bloodPressure: null,
@@ -131,8 +129,6 @@ const medicalInfo = ref({
 const isValidPhoneNumber = ref(false);
 const isValidEmergencyPhoneNumber = ref(false);
 const isValidRelativePhoneNumber = ref(false);
-
-const { addUser } = mapActions("userManagement", ["addUser"]);
 
 const phoneNumberChanged = (e) => {
   isValidPhoneNumber.value = e?.valid;
@@ -254,13 +250,11 @@ const focusDate = () => {
     <PageHeader
       title="Add New Patient"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
     />
     <br />
     <div>
-      <h5 class="text-left warning--text text-h5 mb-4 font-weight-bold">
-        Patient Info
-      </h5>
+      <h5 class="text-left warning--text text-h5 mb-4 font-weight-bold">Patient Info</h5>
       <div>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
@@ -398,9 +392,7 @@ const focusDate = () => {
               />
             </v-col>
           </v-row>
-          <h5
-            class="text-left warning--text text-h5 mb-4 mt-5 font-weight-bold"
-          >
+          <h5 class="text-left warning--text text-h5 mb-4 mt-5 font-weight-bold">
             Emergency Contact Info
           </h5>
           <v-row v-for="(familyInfo, index) in familyMemberInfo" :key="index">
@@ -471,9 +463,7 @@ const focusDate = () => {
             </v-col>
           </v-row>
 
-          <h5
-            class="text-left warning--text text-h5 mb-4 mt-5 font-weight-bold"
-          >
+          <h5 class="text-left warning--text text-h5 mb-4 mt-5 font-weight-bold">
             Medical History
           </h5>
           <v-row>

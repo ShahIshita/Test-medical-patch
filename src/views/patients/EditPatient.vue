@@ -220,7 +220,7 @@ const focusDate = () => {
     <PageHeader
       title="Edit User"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
     />
     <v-progress-circular
       indeterminate

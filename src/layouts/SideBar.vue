@@ -37,7 +37,7 @@ const logOut = () => {
       <img
         class="sidebar-logo ml-8"
         src="@/assets/logo-white.svg"
-        @click="$router.push('/')"
+        @click="router.push('/')"
         height="30"
       />
     </v-app-bar>
@@ -47,9 +47,7 @@ const logOut = () => {
       width="10%"
       :style="{
         width: display.smAndDown ? '280px' : '120px',
-        backgroundColor: display.smAndDown
-          ? 'rgb(245,130,32)'
-          : 'rgb(245,130,32)',
+        backgroundColor: display.smAndDown ? 'rgb(245,130,32)' : 'rgb(245,130,32)',
       }"
       :permanent="display.mdAndUp"
       v-if="!getRoute"
@@ -58,7 +56,7 @@ const logOut = () => {
         <img
           class="sidebar-logo"
           src="@/assets/logo-white.svg"
-          @click="$router.push('/')"
+          @click="router.push('/')"
           height="30"
           style="cursor: pointer"
         />
@@ -189,10 +187,7 @@ const logOut = () => {
       </div>
     </v-navigation-drawer>
 
-    <v-main
-      class="main-wrapper"
-      :class="{ livePage: $route.path === '/live-device' }"
-    >
+    <v-main class="main-wrapper" :class="{ livePage: $route.path === '/live-device' }">
       <router-view />
     </v-main>
   </v-app>

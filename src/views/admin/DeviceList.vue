@@ -13,7 +13,7 @@ const { searchUserString, searchUser } = useSearch();
 
 const store = useStore();
 const loadingStatus = store.getters.loadingStatus;
-const getDevices = store.getters.getDevices;
+const getDevices = ref([]);
 
 //const icon = "justify";
 const valid = ref(true);
@@ -67,19 +67,16 @@ const getAllDevices = async () => {
 };
 
 const deleteSingleDevice = async (item) => {
-  if (
-    await data.value.confirm.open(
-      "Are you sure you want to delete this device?",
-    )
-  ) {
+  if (await data.value.confirm.open("Are you sure you want to delete this device?")) {
     try {
       const data = await store.dispatch("devices/deleteDevice", item);
       if (data.statusCode === 200) {
         toast.success(data.message, { timeout: 3000 });
       }
     } catch (err) {
-      setTimeout(() => {
-        getAllDevices();
+      setTimeout(async () => {
+        await getAllDevices();
+        getDevices.value = store.getters["devices/getDevices"];
       }, 500);
       toast.error(err.message, { timeout: 3000 });
     }
@@ -112,7 +109,7 @@ const save = async () => {
   if (editedIndex.value > -1) {
     const res = await axios.put(
       `${process.env.VUE_APP_API_URL}/devices/updatesingledevicedetails?deviceId=${itemId}`,
-      editedItem.value,
+      editedItem.value
     );
     if (res.status === 200) {
       toast.success("Device Updated successfully.", {
@@ -149,14 +146,14 @@ const assignDevicesToPatient = () => {
 
 const checkValidAssignDoctor = async () => {
   isValidAssignDoctor.value = await data.value.assign.open(
-    "Some of device are already assigned to doctor. Do You wish to continue?",
+    "Some of device are already assigned to doctor. Do You wish to continue?"
   );
   return isValidAssignDoctor;
 };
 
 const checkValidAssignPatient = async () => {
   isValidAssignPatient.value = await data.value.assign.open(
-    "Some of device are already assigned to doctor. Do You wish to continue?",
+    "Some of device are already assigned to doctor. Do You wish to continue?"
   );
   return isValidAssignPatient;
 };
@@ -173,8 +170,9 @@ const getSelectedValue = () => {
         if (res.message === "devices assigned to  doctor successfully.") {
           selected.value = [];
           assignDeviceDoctorDialog.value = false;
-          setTimeout(() => {
-            getAllDevices();
+          setTimeout(async () => {
+            await getAllDevices();
+            getDevices.value = store.getters["devices/getDevices"];
           }, 500);
           toast.success(res.message, { timeout: 3000 });
           return;
@@ -184,8 +182,9 @@ const getSelectedValue = () => {
             assignDeviceToDoctor.value(data);
             selected.value = [];
             assignDeviceDoctorDialog.value = false;
-            setTimeout(() => {
-              getAllDevices();
+            setTimeout(async () => {
+              await getAllDevices();
+              getDevices.value = store.getters["devices/getDevices"];
             }, 500);
             toast.success("device assigned to doctor successfully.", {
               timeout: 3000,
@@ -211,8 +210,9 @@ const getSelectedValuePatient = () => {
         if (res.message === "devices assigned to customer successfully.") {
           selected.value = [];
           assignDevicePatientDialog.value = false;
-          setTimeout(() => {
-            getAllDevices();
+          setTimeout(async () => {
+            await getAllDevices();
+            getDevices.value = store.getters["devices/getDevices"];
           }, 500);
           toast.success(res.message, { timeout: 3000 });
         } else {
@@ -221,8 +221,9 @@ const getSelectedValuePatient = () => {
             assignDeviceToPatient.value(data);
             selected.value = [];
             assignDevicePatientDialog.value = false;
-            setTimeout(() => {
-              getAllDevices();
+            setTimeout(async () => {
+              await getAllDevices();
+              getDevices.value = store.getters["devices/getDevices"];
             }, 500);
             toast.success("device assigned to customer successfully.", {
               timeout: 3000,
@@ -234,22 +235,21 @@ const getSelectedValuePatient = () => {
   }
   selectedHeadersPatient.value = {};
 };
-watch(editedItem, () => {
-  getAllDevices();
+watch(editedItem, async () => {
+  await getAllDevices();
+  getDevices.value = store.getters["devices/getDevices"];
 });
 
-onMounted(() => {
-  getAllDevices();
+onMounted(async () => {
+  await getAllDevices();
+  getDevices.value = store.getters["devices/getDevices"];
+  console.log(store);
 });
 </script>
 
 <template>
   <div>
-    <PageHeader
-      title="Device List"
-      pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
-    />
+    <PageHeader title="Device List" pageIcon="mdi-arrow-left" @goBack="router.go(-1)" />
     <div class="text-right mb-5">
       <v-btn
         color="warning"
@@ -341,13 +341,7 @@ onMounted(() => {
             <v-btn color="warning" large :disabled="!valid" @click="addDevice">
               Add Device
             </v-btn>
-            <v-btn
-              color="warning"
-              class="ml-5"
-              outlined
-              large
-              @click="addDialog = false"
-            >
+            <v-btn color="warning" class="ml-5" outlined large @click="addDialog = false">
               Cancel
             </v-btn>
           </div>
@@ -438,7 +432,7 @@ onMounted(() => {
         show-select
         v-model="selected"
         :search="searchUserString"
-        :custom-filter="searchUser"
+        :custom-filter="useSearch"
       >
         <template v-slot:top>
           <v-col cols="12" sm="12" md="12">
@@ -467,12 +461,7 @@ onMounted(() => {
         </template>
       </v-data-table>
 
-      <v-dialog
-        v-model="dialog"
-        max-width="600px"
-        persistent
-        overlay-color="white"
-      >
+      <v-dialog v-model="dialog" max-width="600px" persistent overlay-color="white">
         <v-card>
           <v-card-title>
             <span class="text-h5 ml-3">Edit</span>

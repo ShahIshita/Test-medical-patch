@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/dashboard/HomeView.vue";
+import NotFound from "../views/dashboard/NotFound.vue";
 
 const routes = [
   {
@@ -84,6 +85,8 @@ const routes = [
     name: "settings",
     component: () => import("../views/settings/SettingsView.vue"),
   },
+   { path: "/:pathMatch(.*)*", name: "not-found", component: NotFound },
+  { path: "/:pathMatch(.*)", name: "bad-not-found", component: NotFound },
 ];
 
 const router = createRouter({

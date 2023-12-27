@@ -15,7 +15,7 @@ const radioHeight = ref("cm");
     <PageHeader
       title="Settings"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
     />
     <br />
     <div>

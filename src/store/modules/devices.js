@@ -14,7 +14,7 @@ const getters = {
 
 const mutations = {
   SET_LOADING_STATUS(state, loadingStatus) {
-    state.isLoading.value = loadingStatus;
+    state.isLoading = loadingStatus;
   },
   SET_ALL_DEVICES(state, deviceData) {
     state.devices.value = deviceData
@@ -57,6 +57,7 @@ const actions = {
   async getAllDevices({ commit }) {
     commit("SET_LOADING_STATUS", true);
     const res = await devices.getAllDevices();
+    console.log(res)
     if (res.status === 200) {
       commit("SET_ALL_DEVICES", res.data.data);
       commit("SET_LOADING_STATUS", false);

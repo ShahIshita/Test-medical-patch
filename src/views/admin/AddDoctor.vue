@@ -8,8 +8,9 @@ import "vue3-toastify/dist/index.css";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const store = useStore();
 // const toast = Toast.useToast();
-const { addUser } = useStore("userManagement");
+const addUser = store.dispatch("userManagement/addUser");
 
 const valid = ref(true);
 const showPassIcon = ref(false);
@@ -143,13 +144,11 @@ const addDoctor = async () => {
     <PageHeader
       title="Add New Doctor"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
     />
     <br />
     <div>
-      <h5 class="text-left warning--text text-h5 mb-4 font-weight-bold">
-        Doctor Info
-      </h5>
+      <h5 class="text-left warning--text text-h5 mb-4 font-weight-bold">Doctor Info</h5>
       <div>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>

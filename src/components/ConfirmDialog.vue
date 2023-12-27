@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
+import { useDisplay } from "vuetify";
 
 const dialog = ref(false);
 const resolve = ref(null);
@@ -11,6 +12,8 @@ const options = ref({
   zIndex: 200,
   noconfirm: false,
 });
+
+const display = ref(useDisplay());
 
 // methods
 
@@ -50,7 +53,7 @@ onMounted(() => {
   <div>
     <v-dialog
       v-model="dialog"
-      :width="$vuetify.breakpoint.smAndUp ? '500px' : '400px'"
+      :width="display.smAndUp ? '500px' : '400px'"
       height="500px"
       :max-width="options.width"
       :style="{ zIndex: options.zIndex }"
@@ -64,17 +67,8 @@ onMounted(() => {
         <v-card-text v-show="!!message" class="pa-4 black--text">
           <span v-html="message"></span>
         </v-card-text>
-        <v-btn class="px-sm-8" large color="warning" @click="agree">
-          Delete
-        </v-btn>
-        <v-btn
-          large
-          class="ml-5 px-sm-6"
-          color="warning"
-          outlined
-          text
-          @click="cancel"
-        >
+        <v-btn class="px-sm-8" large color="warning" @click="agree"> Delete </v-btn>
+        <v-btn large class="ml-5 px-sm-6" color="warning" outlined text @click="cancel">
           Cancel
         </v-btn>
       </v-card>

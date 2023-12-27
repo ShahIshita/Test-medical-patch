@@ -5,6 +5,7 @@ import moment from "moment";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 const route = useRoute();
+const router = useRouter();
 
 const role = ref(localStorage.getItem("role"));
 
@@ -32,7 +33,7 @@ onMounted(() => {
     <PageHeader
       title="Profile Details"
       pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
+      @goBack="router.go(-1)"
     />
     <v-progress-circular
       indeterminate
@@ -69,9 +70,7 @@ onMounted(() => {
               color="warning"
               outlined
               :height="53"
-              @click="
-                $router.push(`/edit-patient/${getSinglePatientData[0]?.id}`)
-              "
+              @click="router.push(`/edit-patient/${getSinglePatientData[0]?.id}`)"
             >
               <v-icon class="d-md-none">mdi-pencil</v-icon>
               <span class="d-none d-md-block">Edit Profile</span>
@@ -82,10 +81,7 @@ onMounted(() => {
 
       <v-flex d-flex xs12 sm12 md6>
         <div class="card-light w-100 pb-4">
-          <h4
-            class="text-left text-h5 font-weight-bold mb-5"
-            style="color: #f58220"
-          >
+          <h4 class="text-left text-h5 font-weight-bold mb-5" style="color: #f58220">
             {{ role !== "Admin" ? "Patient Info" : "Doctor Info" }}
           </h4>
           <v-row>
@@ -113,12 +109,7 @@ onMounted(() => {
                 </h3>
               </div>
             </v-col>
-            <v-col
-              cols="6"
-              sm="6"
-              md="6"
-              v-if="getSinglePatientData[0]?.emergencyPhone"
-            >
+            <v-col cols="6" sm="6" md="6" v-if="getSinglePatientData[0]?.emergencyPhone">
               <div class="d-flex flex-column align-start mb-3 text-start">
                 <small class="font-weight-regular">Emergency No</small>
                 <h3 class="font-weight-medium">
@@ -162,9 +153,7 @@ onMounted(() => {
                 <small class="font-weight-regular">GST No</small>
                 <h3 class="font-weight-medium">
                   {{
-                    getSinglePatientData[0]?.gstNo
-                      ? getSinglePatientData[0]?.gstNo
-                      : "--"
+                    getSinglePatientData[0]?.gstNo ? getSinglePatientData[0]?.gstNo : "--"
                   }}
                 </h3>
               </div>
@@ -196,15 +185,9 @@ onMounted(() => {
       <v-flex d-flex xs12 sm12 md6>
         <div
           class="card-light w-100 pb-4"
-          v-if="
-            getSinglePatientData[0]?.familyMembers.length > 0 &&
-            role !== 'Admin'
-          "
+          v-if="getSinglePatientData[0]?.familyMembers.length > 0 && role !== 'Admin'"
         >
-          <h4
-            class="text-left text-h5 font-weight-bold mb-5"
-            style="color: #f58220"
-          >
+          <h4 class="text-left text-h5 font-weight-bold mb-5" style="color: #f58220">
             Emergency Contacts
           </h4>
           <v-row class="m-0">
@@ -222,11 +205,7 @@ onMounted(() => {
                     {{ familyInfo.name ? familyInfo.name : "--" }}
                   </h3>
                   <h4 class="warning--text text-start font-weight-regular">
-                    {{
-                      familyInfo.selectedRelation
-                        ? familyInfo.selectedRelation
-                        : "--"
-                    }}
+                    {{ familyInfo.selectedRelation ? familyInfo.selectedRelation : "--" }}
                   </h4>
                   <small class="text-start">
                     {{ familyInfo.contactNo ? familyInfo.contactNo : "--" }}
@@ -240,10 +219,7 @@ onMounted(() => {
 
       <v-flex d-flex xs12 sm12 md6>
         <div class="card-light w-100 pb-4" v-if="role !== 'Admin'">
-          <h4
-            class="text-h5 font-weight-bold text-left mb-5"
-            style="color: #f58220"
-          >
+          <h4 class="text-h5 font-weight-bold text-left mb-5" style="color: #f58220">
             Medical Info
           </h4>
           <v-row>

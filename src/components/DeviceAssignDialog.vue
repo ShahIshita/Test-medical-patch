@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from "vue";
+import { useDisplay } from "vuetify";
+const display = ref(useDisplay());
 
 const dialog = ref(false);
 const resolve = ref(null);
@@ -38,7 +40,7 @@ const cancel = () => {
   <div>
     <v-dialog
       v-model="dialog"
-      :width="$vuetify.breakpoint.smAndUp ? '600px' : '400px'"
+      :width="display.smAndUp ? '600px' : '400px'"
       :max-width="options.width"
       :style="{ zIndex: options.zIndex }"
       @keydown.esc="cancel"
