@@ -4,6 +4,7 @@ import { ref, watch, onMounted } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { useStore } from "vuex";
+import SideBar from "@/layouts/SideBar";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import PageHeader from "@/layouts/PageHeader.vue";
 import DeviceAssignDialog from "@/components/DeviceAssignDialog.vue";
@@ -22,11 +23,11 @@ const role = localStorage.getItem("role");
 const dialog = ref(false);
 
 const headers = [
-  { text: "DeviceName", align: "start", sortable: false, value: "name" },
-  { text: "Mac Address", value: "macAddressFramed" },
-  { text: "Doctor Name", value: "doctorFullName" },
-  { text: "Patient Name", value: "fullName" },
-  { text: "Actions", value: "actions", sortable: false },
+  { title: "DeviceName", align: "start", sortable: false, key: "name" },
+  { title: "Mac Address", key: "macAddressFramed" },
+  { title: "Doctor Name", key: "doctorFullName" },
+  { title: "Patient Name", key: "fullName" },
+  { title: "Actions", key: "actions", sortable: false },
 ];
 
 const editedIndex = ref(-1);
@@ -58,7 +59,7 @@ const selected = ref([]);
 const selectedHeadersPatient = ref({});
 let isValidAssignDoctor = ref(false);
 let isValidAssignPatient = ref(false);
-const data = ref(null);
+const data = ref();
 
 // const toast = Toast.useToast();
 
@@ -243,13 +244,13 @@ watch(editedItem, async () => {
 onMounted(async () => {
   await getAllDevices();
   getDevices.value = store.getters["devices/getDevices"];
-  console.log(store);
 });
 </script>
 
 <template>
   <div>
     <PageHeader title="Device List" pageIcon="mdi-arrow-left" @goBack="router.go(-1)" />
+    <SideBar />
     <div class="text-right mb-5">
       <v-btn
         color="warning"
@@ -432,7 +433,7 @@ onMounted(async () => {
         show-select
         v-model="selected"
         :search="searchUserString"
-        :custom-filter="useSearch"
+        :custom-filter="searchUser"
       >
         <template v-slot:top>
           <v-col cols="12" sm="12" md="12">

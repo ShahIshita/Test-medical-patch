@@ -6,6 +6,7 @@ const props = defineProps({
   pageIcon: String,
   btnName: String,
   title: String,
+  colorName: String,
 });
 
 const role = localStorage.getItem("role");
@@ -21,12 +22,9 @@ const addNewPatient = () => {
 
 <template>
   <div class="d-flex mr-auto align-center">
-    <v-icon
-      v-if="props.pageIcon"
-      class="black--text icon-big"
-      @click="goBack"
-      >{{ props.pageIcon }}</v-icon
-    >
+    <v-icon v-if="props.pageIcon" class="black--text icon-big" @click="goBack">{{
+      props.pageIcon
+    }}</v-icon>
     <v-card-title class="font-weight-bold pl-0">
       {{ props.title }}
     </v-card-title>

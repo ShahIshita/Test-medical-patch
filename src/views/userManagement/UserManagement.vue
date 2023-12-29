@@ -18,6 +18,8 @@ const selected = ref([]);
 const assignDialog = ref(false);
 const isValidAssignPatient = ref(false);
 const data = ref(null);
+const getPatientsDoctor = ref([]);
+const getPatientsData = ref([]);
 
 const headers = [
   { text: "DeviceName", align: "start", sortable: false, value: "name" },
@@ -25,16 +27,20 @@ const headers = [
   { text: "Mac Address", value: "macAddressFramed" },
 ];
 
-const { getPatients, getAllPatientsOnly, loadingStatus } =
-  store.getters["doctors"];
+const { getPatients, getAllPatientsOnly, loadingStatus } = store.getters["doctors"];
 
-const { getPatientsForDoctor, getAllPatientsData } = store.dispatch("doctors");
-const { checkAssignDevicesToPatient, assignDeviceToPatient } =
-  store.dispatch("devices");
+// const { getPatientsForDoctor, getAllPatientsData } = store.dispatch("doctors");
+const getAllPatientsData = async () => {
+  await store.dispatch("doctors/getAllPatientsData");
+};
+const getPatientsForDoctor = async () => {
+  await store.dispatch("doctors/getPatientsForDoctor");
+};
+const { checkAssignDevicesToPatient, assignDeviceToPatient } = store.dispatch("devices");
 
 const checkValidAssignPatient = async () => {
   isValidAssignPatient.value = await data.value.assign.open(
-    "Some of the devices are already assigned to the doctor. Do you wish to continue?",
+    "Some of the devices are already assigned to the doctor. Do you wish to continue?"
   );
   return isValidAssignPatient.value;
 };
@@ -88,18 +94,17 @@ const getSelectedValue = () => {
   selectedHeaders.value = {};
 };
 
-onMounted(() => {
-  getPatientsForDoctor(getDoctorId);
+onMounted(async () => {
+  await getPatientsForDoctor();
+  getPatientsDoctor.value = store.getters["doctors/getPatientsDoctor"];
+  await getAllPatientsData();
+  getPatientsData.value = store.getters["doctors/getPatientsData"];
 });
 </script>
 
 <template>
   <div>
-    <PageHeader
-      title="Device List"
-      pageIcon="mdi-arrow-left"
-      @goBack="$router.go(-1)"
-    />
+    <PageHeader title="Device List" pageIcon="mdi-arrow-left" @goBack="$router.go(-1)" />
     <div class="table-changes">
       <div class="text-right">
         <v-btn

@@ -3,28 +3,29 @@ import PageHeader from "@/layouts/PageHeader.vue";
 import { ref, onMounted, computed } from "vue";
 import moment from "moment";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
 const role = ref(localStorage.getItem("role"));
-
+const getSinglePatientData = ref([]);
 const store = useStore();
 
-const { getSinglePatientData, loadingStatus } = store.getters["doctors"];
-
+// const { getSinglePatientData, loadingStatus } = store.getters["doctors"];
+const loadingStatus = store.getters.loadingStatus;
 const formatDate = computed(() => {
   let dateOfBirth = getSinglePatientData.value[0]?.dob;
   let formattedDate = moment(dateOfBirth).format("YYYY-MM-DD");
   return formattedDate;
 });
 
-const getSinglePatient = (id) => {
-  store.dispatch("doctors/getSinglePatient", id);
+const getSinglePatient = async (id) => {
+  await store.dispatch("doctors/getSinglePatient", id);
 };
 
-onMounted(() => {
-  getSinglePatient(route.params.id);
+onMounted(async () => {
+  await getSinglePatient(route.params.id);
+  getSinglePatientData.value = store.getters["doctors/getSinglePatientData"];
 });
 </script>
 

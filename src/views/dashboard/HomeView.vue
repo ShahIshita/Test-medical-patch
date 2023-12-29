@@ -1,6 +1,7 @@
 <script setup>
 import SearchBar from "@/components/SearchBar.vue";
 import PageHeader from "@/layouts/PageHeader.vue";
+import SideBar from "@/layouts/SideBar.vue";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import { useDisplay } from "vuetify";
@@ -11,25 +12,33 @@ const getDoctorId = localStorage.getItem("user_id");
 const gridNumber = ref(4);
 // const realTimeMessage = ref("Offline");
 
-const loadingStatus = store.getters.loadingStatus;
-const filteredPatients = store.getters.filteredPatients;
+const loadingStatus = ref([]);
+const filteredPatients = ref([]);
 
 const { lgAndUp } = useDisplay();
 
 const showGrid = computed(() => `lg${gridNumber.value}`);
 const mobile = computed(() => store.state.lgAndUp);
+const getPatientsDoctor = ref([]);
 
-const getPatientsForDoctor = () => {
+const getPatientsForDoctor = async () => {
   if (getDoctorId) {
-    store.dispatch("doctors/getPatientsForDoctor", getDoctorId);
+    await store.dispatch("doctors/getPatientsForDoctor", getDoctorId);
   }
 };
 
-onMounted(getPatientsForDoctor);
+onMounted(async () => {
+  await getPatientsForDoctor();
+  getPatientsDoctor.value = store.getters["doctors/getPatientsDoctor"];
+  loadingStatus.value = store.getters.loadingStatus;
+  filteredPatients.value = store.getters.filteredPatients;
+  console.log(store);
+});
 </script>
 
 <template>
   <div>
+    <SideBar />
     <div class="d-flex flex-wrap page-header-item align-center">
       <PageHeader title="Dashboard" class="ph-item-1" />
       <SearchBar class="mr-3 ph-item-2" />
@@ -85,7 +94,7 @@ onMounted(getPatientsForDoctor);
             color="#F6F2F2"
             class="main__card"
             style="width: 100%"
-            @click="$router.push(`/patient-details/${patient?.id}`)"
+            @click="router.push(`/patient-details/${patient?.id}`)"
           >
             <div class="card-header">
               <div class="d-flex card-title-row">
@@ -101,10 +110,7 @@ onMounted(getPatientsForDoctor);
                     v-if="patient.isOnline === 0"
                   ></span>
                 </v-spacer>
-                <span
-                  class="active-status online"
-                  v-if="patient.isOnline === 1"
-                ></span>
+                <span class="active-status online" v-if="patient.isOnline === 1"></span>
               </div>
               <div class="icon-text-block">
                 <img
@@ -132,9 +138,7 @@ onMounted(getPatientsForDoctor);
                   height="29"
                   class="icon__image"
                 />
-                <span class="text">{{
-                  patient?.macAddressFramed.toUpperCase()
-                }}</span>
+                <span class="text">{{ patient?.macAddressFramed.toUpperCase() }}</span>
               </div>
               <div class="icon-text-block">
                 <img
@@ -145,9 +149,7 @@ onMounted(getPatientsForDoctor);
                 />
                 <span class="text"
                   >{{
-                    patient?.batdata?.bat_vals
-                      ? patient.batdata.bat_vals
-                      : "100"
+                    patient?.batdata?.bat_vals ? patient.batdata.bat_vals : "100"
                   }}
                   %</span
                 >
@@ -266,10 +268,7 @@ onMounted(getPatientsForDoctor);
                   <span class="unit">mmHg</span>
                 </h5>
               </div>
-              <div
-                class="mini-light-box"
-                style="border-bottom-left-radius: inherit"
-              >
+              <div class="mini-light-box" style="border-bottom-left-radius: inherit">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <img
@@ -295,10 +294,7 @@ onMounted(getPatientsForDoctor);
                   <span class="unit">°C</span>
                 </h5>
               </div>
-              <div
-                class="mini-light-box"
-                style="border-bottom-right-radius: inherit"
-              >
+              <div class="mini-light-box" style="border-bottom-right-radius: inherit">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
                     <img

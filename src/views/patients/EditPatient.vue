@@ -34,8 +34,7 @@ const emailRules = [
 const addressRules = [(v) => !!v || "Address is required"];
 const aadharRules = [
   (v) => !!v || "Aadhar Number is required",
-  (v) =>
-    /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/.test(v) || "Aadhar Number is invalid",
+  (v) => /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/.test(v) || "Aadhar Number is invalid",
 ];
 const weightRules = [(v) => !!v || "Weight is required"];
 const heightRules = [(v) => !!v || "Height is required"];
@@ -118,8 +117,11 @@ onMounted(async () => {
   loading.value = true;
   const res = await doctors.getSinglePatientData(route?.params?.id);
   user.value = res.data.data[0];
-  user.value["mobile_no1"] = user.value?.mobile_no.toString();
-  user.value["emergencyPhone"] = user.value?.emergencyPhone.toString();
+
+  // Check if mobile_no and emergencyPhone are not null before calling toString
+  user.value["mobile_no1"] = user.value?.mobile_no?.toString() || "";
+  user.value["emergencyPhone"] = user.value?.emergencyPhone?.toString() || "";
+
   const dateOfBirth = res.data.data[0].DOB;
   const formattedDate = moment(dateOfBirth).format("YYYY-MM-DD");
   dob.value = formattedDate;
@@ -188,7 +190,7 @@ const updateUser = async () => {
     } else {
       const res = await axios.patch(
         `${process.env.VUE_APP_API_URL}/users/updateuser/${user.value.userId}`,
-        user.value,
+        user.value
       );
       if (res.status === 200) {
         if (role === "Doctor") {
@@ -217,16 +219,8 @@ const focusDate = () => {
 
 <template>
   <div>
-    <PageHeader
-      title="Edit User"
-      pageIcon="mdi-arrow-left"
-      @goBack="router.go(-1)"
-    />
-    <v-progress-circular
-      indeterminate
-      color="blue"
-      v-if="loading"
-    ></v-progress-circular>
+    <PageHeader title="Edit User" pageIcon="mdi-arrow-left" @goBack="router.go(-1)" />
+    <v-progress-circular indeterminate color="blue" v-if="loading"></v-progress-circular>
     <v-card-title class="warning--text text-h5 ml-n2 mb-2 font-weight-bold"
       >User Info</v-card-title
     >

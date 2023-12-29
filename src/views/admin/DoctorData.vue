@@ -3,21 +3,24 @@ import { ref, onMounted } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import PageHeader from "@/layouts/PageHeader.vue";
 import ConfirmDialog from "../../components/ConfirmDialog.vue";
 import useSearch from "@/composable/searchUser";
+const router = useRouter();
 
-const { searchUserString } = useSearch();
+const { searchUserString, searchUser } = useSearch();
+const getPatientsData = ref([]);
 
 const getAdminId = localStorage.getItem("user_id");
 const role = localStorage.getItem("role");
 const store = useStore();
 
 const headers = ref([
-  { text: "Doctor Image", align: "start", sortable: false, value: "image" },
-  { text: "Doctor Name", sortable: false, value: "fullName" },
-  { text: "Phone No.", value: "mobileNo" },
-  { text: "Actions", value: "actions", sortable: false },
+  { title: "Doctor Image", align: "start", sortable: false, key: "image" },
+  { title: "Doctor Name", sortable: false, key: "fullName" },
+  { title: "Phone No.", key: "mobileNo" },
+  { title: "Actions", key: "actions", sortable: false },
 ]);
 
 //const dialog = ref(false);
@@ -27,25 +30,27 @@ const dialogDelete = ref(false);
 const loadingStatus = store.getters.loadingStatus;
 const getAllDoctorsOnly = store.getters.getAllDoctorsOnly;
 
-const getAllData = () => {
-  store.dispatch.getAllPatientsData;
-  store.dispatch.deletePatient;
+const getAllPatientsData = async () => {
+  await store.dispatch("doctors/getAllPatientsData");
+  // store.dispatch("doctors/deletePatient");
 };
 const deleteSingleDoctor = async (item) => {
   if (await confirmDelete()) {
     try {
       const data = await deletePatient(item);
       if (data.statusCode === 200) {
-        setTimeout(() => {
-          getAllPatientsData(getAdminId);
+        setTimeout(async () => {
+          await getAllPatientsData(getAdminId);
+          getPatientsData.value = store.getters["doctors/getPatientsData"];
         }, 500);
         dialogDelete.value = true;
         toast.success(data.message, { timeout: 3000 });
       }
     } catch (err) {
       console.log(err);
-      setTimeout(() => {
-        getAllPatientsData(getAdminId);
+      setTimeout(async () => {
+        await getAllPatientsData(getAdminId);
+        getPatientsData.value = store.getters["doctors/getPatientsData"];
       }, 500);
       toast.error(err.message, { timeout: 3000 });
       dialogDelete.value = true;
@@ -60,7 +65,9 @@ const confirmDelete = async () => {
 };
 
 onMounted(async () => {
-  await getAllData();
+  await getAllPatientsData();
+  getPatientsData.value = store.getters["doctors/getPatientsData"];
+  console.log(store.getters["doctors/getPatientsData"]);
 });
 </script>
 
@@ -80,10 +87,10 @@ onMounted(async () => {
         :loading="loadingStatus"
         loading-text="Loading... Please wait"
         :headers="headers"
-        :items="getAllDoctorsOnly"
+        :items="getPatientsData"
         :items-per-page="5"
         :search="searchUserString"
-        :custom-filter="useSearch"
+        :custom-filter="searchUser"
         class="elevation-1 table text-capitalize"
       >
         <template v-slot:top>

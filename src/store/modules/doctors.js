@@ -3,15 +3,20 @@ import doctors from "../../api/doctor";
 const state = {
   deviceData: [],
   patientsData: [],
+  PatientsDoctor:[],
   singlePatientData: [],
   singleDeviceData: [],
+  deletePatient: [],
   loading: false,
   searchTerm: "",
 };
 
 const getters = {
-  loadingStatus: (state) => state.loading.value,
+  loadingStatus: (state) => state.loading,
   getPatients: (state) => state.deviceData.slice().reverse(),
+  getPatientsData: (state) => state.patientsData,
+  getPatientsDoctor:(state) => state.PatientsDoctor,
+  deletePatient: (state) => state.deletePatient,
   getAllPatientsOnly: (state) =>
     state.patientsData
       .filter((patient) => patient.role === "Customer")
@@ -40,7 +45,7 @@ const getters = {
 };
 
 const mutations = {
-  SET_LOADING_STATUS(loadingStatus) {
+  SET_LOADING_STATUS(state,loadingStatus) {
     state.loading = loadingStatus;
   },
 
@@ -70,7 +75,8 @@ const mutations = {
     }));
   },
 
-  SET_ALL_PATIENT(patients) {
+  SET_ALL_PATIENT(state,patients) {
+    console.log(patients)
     state.patientsData = patients.map((patient) => ({
       id: patient.userId,
       firstName:
@@ -95,7 +101,7 @@ const mutations = {
     }));
   },
 
-  SET_SINGLE_PATIENT(patientData) {
+  SET_SINGLE_PATIENT(state, patientData) {
     state.singlePatientData = patientData.map((patient) => ({
       id: patient.userId,
       firstName: patient.first_Name,
@@ -141,12 +147,12 @@ const mutations = {
   },
 
   DELETE_PATIENT(state, patientId) {
-    state.singlePatientData = state.singlePatientData.value.filter(
+    state.singlePatientData = state.singlePatientData.filter(
       (data) => data.id !== patientId,
     );
   },
 
-  SET_SINGLE_DEVICE(deviceData) {
+  SET_SINGLE_DEVICE(state,deviceData) {
     state.singleDeviceData = deviceData.map((device) => ({
       id: device._id,
       name: device.name,
@@ -186,6 +192,7 @@ const actions = {
   async getAllPatientsData({ commit }, id) {
     commit("SET_LOADING_STATUS", true);
     const res = await doctors.getAllPatientsData(id);
+    console.log(res.data.data)
     if (res.status === 200) {
       commit("SET_ALL_PATIENT", res.data.data);
       commit("SET_LOADING_STATUS", false);
