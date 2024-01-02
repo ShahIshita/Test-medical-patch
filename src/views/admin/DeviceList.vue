@@ -9,7 +9,9 @@ import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import PageHeader from "@/layouts/PageHeader.vue";
 import DeviceAssignDialog from "@/components/DeviceAssignDialog.vue";
 import useSearch from "@/composable/searchUser";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const { searchUserString, searchUser } = useSearch();
 
 const store = useStore();

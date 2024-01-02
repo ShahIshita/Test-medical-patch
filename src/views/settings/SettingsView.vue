@@ -1,6 +1,8 @@
 <script setup>
 import PageHeader from "@/layouts/PageHeader.vue";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const pushNotification = ref(true);
 const dailyReminders = ref(true);
@@ -12,11 +14,7 @@ const radioHeight = ref("cm");
 
 <template>
   <div>
-    <PageHeader
-      title="Settings"
-      pageIcon="mdi-arrow-left"
-      @goBack="router.go(-1)"
-    />
+    <PageHeader title="Settings" pageIcon="mdi-arrow-left" @goBack="router.go(-1)" />
     <br />
     <div>
       <v-row row wrap>
@@ -42,8 +40,8 @@ const radioHeight = ref("cm");
             </div>
             <v-col class="text-start pl-4 pr-4">
               <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt ut labore et dolore magna.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                eirmod tempor invidunt ut labore et dolore magna.
               </p>
             </v-col>
           </v-card>
@@ -62,8 +60,8 @@ const radioHeight = ref("cm");
             >
             <v-col class="text-start pl-4 pr-4">
               <p class="mb-0">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt ut labore et dolore magna.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                eirmod tempor invidunt ut labore et dolore magna.
               </p>
             </v-col>
 
@@ -100,8 +98,7 @@ const radioHeight = ref("cm");
             >
             <v-col class="text-start pl-4 pr-4">
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
-                numquam!
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, numquam!
               </p>
             </v-col>
 
@@ -113,16 +110,12 @@ const radioHeight = ref("cm");
               <v-radio-group v-model="radioWeight" row>
                 <v-radio value="kg" color="warning">
                   <template v-slot:label>
-                    <div class="card__radio font-weight-regular text-h7">
-                      KG
-                    </div>
+                    <div class="card__radio font-weight-regular text-h7">KG</div>
                   </template>
                 </v-radio>
                 <v-radio value="lbs" color="warning">
                   <template v-slot:label>
-                    <div class="card__radio font-weight-regular text-h7">
-                      LBS
-                    </div>
+                    <div class="card__radio font-weight-regular text-h7">LBS</div>
                   </template>
                 </v-radio>
               </v-radio-group>
@@ -136,16 +129,12 @@ const radioHeight = ref("cm");
               <v-radio-group v-model="radioHeight" row>
                 <v-radio value="cm" color="warning">
                   <template v-slot:label>
-                    <div class="card__radio font-weight-regular text-h7">
-                      CM
-                    </div>
+                    <div class="card__radio font-weight-regular text-h7">CM</div>
                   </template>
                 </v-radio>
                 <v-radio value="feet" color="warning">
                   <template v-slot:label>
-                    <div class="card__radio font-weight-regular text-h7">
-                      FEET
-                    </div>
+                    <div class="card__radio font-weight-regular text-h7">FEET</div>
                   </template>
                 </v-radio>
               </v-radio-group>
@@ -176,8 +165,7 @@ const radioHeight = ref("cm");
 
             <v-col class="text-start pl-4 pr-4">
               <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy.
               </p>
             </v-col>
 
@@ -196,8 +184,7 @@ const radioHeight = ref("cm");
 
             <v-col class="text-start pl-4 pr-4">
               <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy.
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy.
               </p>
             </v-col>
           </v-card>

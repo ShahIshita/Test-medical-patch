@@ -19,8 +19,7 @@ const handleInput = (value) => {
   emit("blur", value);
 };
 
-const hasErrors = ref(props.errors.length > 0);
-console.log(hasErrors);
+const hasErrors = ref(props.errors?.length > 0 || false);
 </script>
 
 <template>

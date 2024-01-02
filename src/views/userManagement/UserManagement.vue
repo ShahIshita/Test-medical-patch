@@ -5,9 +5,9 @@ import "vue3-toastify/dist/index.css";
 import { useStore } from "vuex";
 import DeviceAssignDialog from "@/components/DeviceAssignDialog.vue";
 import PageHeader from "@/layouts/PageHeader.vue";
-import { useSearch } from "@/composable/searchUser";
+import useSearch from "@/composable/searchUser";
 
-const { searchUserString } = useSearch();
+const { searchUserString, searchUser } = useSearch();
 const store = useStore();
 
 const getDoctorId = localStorage.getItem("user_id");
@@ -20,24 +20,26 @@ const isValidAssignPatient = ref(false);
 const data = ref(null);
 const getPatientsDoctor = ref([]);
 const getPatientsData = ref([]);
+const getPatients = ref([]);
 
 const headers = [
-  { text: "DeviceName", align: "start", sortable: false, value: "name" },
-  { text: "PatientName", value: "fullName" },
-  { text: "Mac Address", value: "macAddressFramed" },
+  { title: "DeviceName", align: "start", sortable: false, key: "name" },
+  { title: "PatientName", key: "fullName" },
+  { title: "Mac Address", key: "macAddressFramed" },
 ];
 
-const { getPatients, getAllPatientsOnly, loadingStatus } = store.getters["doctors"];
-
 // const { getPatientsForDoctor, getAllPatientsData } = store.dispatch("doctors");
+const loadingStatus = store.getters.loadingStatus;
+const getAllPatientsOnly = store.getters.getAllPatientsOnly;
+
 const getAllPatientsData = async () => {
   await store.dispatch("doctors/getAllPatientsData");
 };
 const getPatientsForDoctor = async () => {
-  await store.dispatch("doctors/getPatientsForDoctor");
+  await store.dispatch("doctors/getPatientsForDoctor", getDoctorId);
 };
-const { checkAssignDevicesToPatient, assignDeviceToPatient } = store.dispatch("devices");
-
+// const assignDeviceToPatient = store.dispatch("devices/assignDeviceToPatient");
+// const checkAssignDevicesToPatient = store.dispatch("devices/checkAssignDevicesToPatient");
 const checkValidAssignPatient = async () => {
   isValidAssignPatient.value = await data.value.assign.open(
     "Some of the devices are already assigned to the doctor. Do you wish to continue?"
@@ -70,8 +72,9 @@ const getSelectedValue = () => {
         if (res.message === "devices assigned to customer successfully.") {
           selected.value = [];
           assignDialog.value = false;
-          setTimeout(() => {
-            getPatientsForDoctor(getDoctorId);
+          setTimeout(async () => {
+            await getPatientsForDoctor(getDoctorId);
+            getPatients.value = store.getters["doctors/getPatients"];
           }, 500);
           toast.success(res.message, { timeout: 3000 });
         } else {
@@ -80,8 +83,9 @@ const getSelectedValue = () => {
             assignDeviceToPatient(data);
             selected.value = [];
             assignDialog.value = false;
-            setTimeout(() => {
-              getPatientsForDoctor(getDoctorId);
+            setTimeout(async () => {
+              await getPatientsForDoctor(getDoctorId);
+              getPatients.value = store.getters["doctors/getPatients"];
             }, 500);
             toast.success("Device assigned to customer successfully.", {
               timeout: 3000,
@@ -95,10 +99,8 @@ const getSelectedValue = () => {
 };
 
 onMounted(async () => {
-  await getPatientsForDoctor();
-  getPatientsDoctor.value = store.getters["doctors/getPatientsDoctor"];
-  await getAllPatientsData();
-  getPatientsData.value = store.getters["doctors/getPatientsData"];
+  await getPatientsForDoctor(getDoctorId);
+  getPatients.value = store.getters["doctors/getPatients"];
 });
 </script>
 
@@ -161,7 +163,7 @@ onMounted(async () => {
         show-select
         v-model="selected"
         :search="searchUserString"
-        :custom-filter="useSearch"
+        :custom-filter="searchUser"
       >
         <template v-slot:top>
           <v-col cols="12" sm="12" md="12">

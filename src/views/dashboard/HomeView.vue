@@ -5,7 +5,8 @@ import SideBar from "@/layouts/SideBar.vue";
 import { ref, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import { useDisplay } from "vuetify";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const store = useStore();
 
 const getDoctorId = localStorage.getItem("user_id");
@@ -14,6 +15,8 @@ const gridNumber = ref(4);
 
 const loadingStatus = ref([]);
 const filteredPatients = ref([]);
+loadingStatus.value = store.getters.loadingStatus;
+filteredPatients.value = store.getters.filteredPatients;
 
 const { lgAndUp } = useDisplay();
 
@@ -30,9 +33,6 @@ const getPatientsForDoctor = async () => {
 onMounted(async () => {
   await getPatientsForDoctor();
   getPatientsDoctor.value = store.getters["doctors/getPatientsDoctor"];
-  loadingStatus.value = store.getters.loadingStatus;
-  filteredPatients.value = store.getters.filteredPatients;
-  console.log(store);
 });
 </script>
 
