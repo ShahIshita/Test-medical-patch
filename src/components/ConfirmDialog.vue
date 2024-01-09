@@ -17,16 +17,16 @@ const display = ref(useDisplay());
 
 // methods
 
-// const open = (title, message, opts) => {
-//   dialog.value = true;
-//   title.value = title;
-//   message.value = message;
-//   options.value = Object.assign(options.value, opts);
-//   return new Promise((res, rej) => {
-//     resolve.value = res;
-//     reject.value = rej;
-//   });
-// };
+const open = (title, message, opts) => {
+  dialog.value = true;
+  title.value = title;
+  message.value = message;
+  options.value = Object.assign(options.value, opts);
+  return new Promise((res, rej) => {
+    resolve.value = res;
+    reject.value = rej;
+  });
+};
 
 const agree = () => {
   resolve.value(true);

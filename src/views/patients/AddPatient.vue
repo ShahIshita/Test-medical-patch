@@ -8,13 +8,14 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 const router = useRouter();
 const store = useStore();
-const { addUser } = store.dispatch("userManagement", ["addUser"]);
+const adduser = store.dispatch("userManagement/addUser");
+// const { addUser } = store.dispatch("userManagement", ["addUser"]);
 
 // const toast = Toast.useToast();
 
 const valid = ref(true);
 const showPassIcon = ref(false);
-const dataref = ref(null);
+const form = ref(null);
 const nameRules = [(v) => !!v || "Name is required"];
 const emailRules = [
   (v) => !!v || "E-mail is required",
@@ -42,7 +43,11 @@ const heartConditionRules = [(v) => !!v || "Must enter Heart Condition"];
 //const selectRules = [(v) => !!v || "Must select this field."];
 
 //const relations = ref(["Son", "Daughter", "Mother", "Father"]);
-//const heartCondition = ref(["Normal"]);
+const heartCondition = ref(["Normal"]);
+const bloodPressureRules = [(v) => !!v || "Blood Pressure is required"];
+const diabeticsRules = [(v) => !!v || "diabetics is required"];
+const thyroidRules = [(v) => !!v || "thyroid is required"];
+const obesityRules = [(v) => !!v || "obesity is required"];
 const dateMenu = ref(false);
 const dateValue = ref(null);
 
@@ -161,7 +166,7 @@ const addField = (obj, type) => {
 
 const removeField = (index, type) => {
   type.splice(index, 1);
-  dataref.value.form.resetValidation();
+  form.value.resetValidation();
 };
 
 const checkEmptyFamilyMemberInfo = () => {
@@ -180,31 +185,37 @@ const checkEmptyFamilyMemberInfo = () => {
 console.log(checkEmptyFamilyMemberInfo);
 
 const addPatient = () => {
+  const sanitizePhoneNumber = (phoneNumber) => {
+    return phoneNumber ? phoneNumber.replaceAll(" ", "") : "";
+  };
+
   let data = {
     first_Name: user.value.fname,
     last_Name: user.value.lname,
     email: user.value.email,
-    mobile_no: user.value.phone.replaceAll(" ", ""),
-    emergencyPhone: user.value.emergencyPhone.replaceAll(" ", ""),
+    mobile_no: sanitizePhoneNumber(user.value.phone),
+    emergencyPhone: sanitizePhoneNumber(user.value.emergencyPhone),
     gender: user.value.gender,
-    height: user.value.height,
-    weight: user.value.weight,
+    height: user.value.height ? user.value.height.toString() : "", // Ensure it's a string or adjust as needed
+    weight: user.value.weight ? user.value.weight.toString() : "", // Ensure it's a string or adjust as needed
     Address: user.value.address,
     password: user.value.password,
-    adharcard: user.value?.aadhar?.replaceAll(" ", ""),
+    adharcard: user.value.aadhar ? user.value.aadhar.replaceAll(" ", "") : "",
     DOB: dateValue.value,
     family_members: familyMemberInfo.value,
     medical_history: [
       {
-        bloodPressure: medicalInfo.value.bloodPressure,
-        diabetics: medicalInfo.value.diabetics,
-        heartCondition: medicalInfo.value.heartCondition,
-        thyroid: medicalInfo.value.thyroid,
-        obesity: medicalInfo.value.obesity,
+        bloodPressure: user.value.bloodPressure
+          ? user.value.bloodPressure.toString()
+          : "",
+        diabetics: user.value.diabetics ? user.value.diabetics.toString() : "",
+        heartCondition: user.value.heartCondition,
+        thyroid: user.value.thyroid ? user.value.thyroid.toString() : "",
+        obesity: user.value.obesity ? user.value.obesity.toString() : "",
       },
     ],
   };
-  dataref.value.form.validate();
+  form.value.validate();
   const checkEmptyFamilyMemberInfo = checkEmptyFamilyMemberInfo();
   console.log("val--", checkEmptyFamilyMemberInfo);
   if (valid.value) {
@@ -306,7 +317,7 @@ const focusDate = () => {
                 min-width="290px"
                 max-width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template v-slot:activator>
                   <v-text-field
                     label="Date Of Birth"
                     readonly
@@ -315,7 +326,6 @@ const focusDate = () => {
                     @focus="focusDate"
                     filled
                     dense
-                    v-on="on"
                   ></v-text-field>
                 </template>
                 <v-date-picker

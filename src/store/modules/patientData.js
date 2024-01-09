@@ -11,6 +11,7 @@ const state = {
 };
 
 const getters = {
+  getPatientAlgoData:(state) => state.patientAlgoData,
   getBodyTempGraphData: (state) => state.bodyTemp,
   getBloodOxygenGraphData: (state) => state.bloodOxygen,
   getPatientSteps: (state) => state.patientSteps,

@@ -14,16 +14,16 @@ const options = ref({
   noconfirm: false,
 });
 
-// const open = (title, message, opts) => {
-//   dialog.value = true;
-//   title.value = title;
-//   message.value = message;
-//   options.value = { ...options.value, ...opts };
-//   return new Promise((res, rej) => {
-//     resolve.value = res;
-//     reject.value = rej;
-//   });
-// };
+const open = (title, message, opts) => {
+  dialog.value = true;
+  title.value = title;
+  message.value = message;
+  options.value = { ...options.value, ...opts };
+  return new Promise((res, rej) => {
+    resolve.value = res;
+    reject.value = rej;
+  });
+};
 
 const agree = () => {
   resolve.value(true);

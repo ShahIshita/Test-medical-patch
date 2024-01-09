@@ -16,7 +16,6 @@ const gridNumber = ref(4);
 const loadingStatus = ref([]);
 const filteredPatients = ref([]);
 loadingStatus.value = store.getters.loadingStatus;
-filteredPatients.value = store.getters.filteredPatients;
 
 const { lgAndUp } = useDisplay();
 
@@ -32,7 +31,9 @@ const getPatientsForDoctor = async () => {
 
 onMounted(async () => {
   await getPatientsForDoctor();
-  getPatientsDoctor.value = store.getters["doctors/getPatientsDoctor"];
+  filteredPatients.value = store.getters["doctors/filteredPatients"];
+  console.log(store.getters["doctors/filteredPatients"]);
+  // getPatientsDoctor.value = store.getters["doctors/getPatientsDoctor"];
 });
 </script>
 
@@ -158,10 +159,9 @@ onMounted(async () => {
             <div class="card-body">
               <div class="mini-light-box">
                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ props }">
                     <img
-                      v-on="on"
-                      v-bind="attrs"
+                      v-bind="props"
                       class="box-icon"
                       src="@/assets/heartbeat.svg"
                       height="39"
@@ -184,10 +184,9 @@ onMounted(async () => {
               </div>
               <div class="mini-light-box">
                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ props }">
                     <img
-                      v-on="on"
-                      v-bind="attrs"
+                      v-bind="props"
                       class="box-icon"
                       src="@/assets/oxygen.svg"
                       height="39"
@@ -210,10 +209,9 @@ onMounted(async () => {
               </div>
               <div class="mini-light-box">
                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ props }">
                     <img
-                      v-on="on"
-                      v-bind="attrs"
+                      v-bind="props"
                       class="box-icon"
                       src="@/assets/Group 509.svg"
                       height="39"
@@ -236,10 +234,9 @@ onMounted(async () => {
               </div>
               <div class="mini-light-box">
                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ props }">
                     <img
-                      v-on="on"
-                      v-bind="attrs"
+                      v-bind="props"
                       class="box-icon"
                       src="@/assets/bloodPressure.svg"
                       height="39"
@@ -270,10 +267,9 @@ onMounted(async () => {
               </div>
               <div class="mini-light-box" style="border-bottom-left-radius: inherit">
                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ props }">
                     <img
-                      v-on="on"
-                      v-bind="attrs"
+                      v-bind="props"
                       class="box-icon"
                       src="@/assets/temprature.svg"
                       height="39"
@@ -296,10 +292,9 @@ onMounted(async () => {
               </div>
               <div class="mini-light-box" style="border-bottom-right-radius: inherit">
                 <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ props }">
                     <img
-                      v-on="on"
-                      v-bind="attrs"
+                      v-bind="props"
                       class="box-icon"
                       src="@/assets/steps.svg"
                       height="39"

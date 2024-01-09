@@ -6,6 +6,7 @@ import { useStore } from "vuex";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { useRouter } from "vue-router";
+import { format } from "date-fns";
 
 const router = useRouter();
 const store = useStore();
@@ -70,8 +71,8 @@ const doctor = ref({
   fname: "",
   lname: "",
   email: "",
-  phone: null,
-  emergencyPhone: null,
+  phone: "",
+  emergencyPhone: "",
   gender: "male",
   password: "",
   address: "",
@@ -91,6 +92,9 @@ const focusDate = async () => {
       dateMenu.value = true;
     }
   }, 200);
+};
+const formatDate = (date) => {
+  return format(new Date(date), "yyyy-MM-dd");
 };
 
 const reset = async () => {
@@ -200,16 +204,13 @@ const addDoctor = async () => {
                 min-width="290px"
                 max-width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template v-slot:activator>
                   <v-text-field
                     label="Date Of Birth"
                     readonly
-                    hide-details
-                    :value="dateValue"
+                    persistent-hint
+                    v-model="dateValue"
                     @focus="focusDate"
-                    filled
-                    dense
-                    v-on="on"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -219,6 +220,7 @@ const addDoctor = async () => {
                   @input="dateMenu = false"
                   :max="new Date().toISOString().slice(0, 10)"
                 ></v-date-picker>
+                <div v-if="dateValue">{{ formatDate(dateValue) }}</div>
               </v-menu>
             </v-col>
             <v-col class="form-group" cols="12" sm="6" md="4">

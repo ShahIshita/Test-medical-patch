@@ -1,9 +1,10 @@
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount, reactive } from "vue";
 import { useStore } from "vuex";
-import mqtt from "mqtt/dist/mqtt";
+import * as mqtt from "mqtt/dist/mqtt.min";
 import PageHeader from "@/layouts/PageHeader.vue";
 import EcgChart from "@/components/EcgChart.vue";
+import { useDisplay } from "vuetify";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -11,24 +12,25 @@ const getDoctorId = localStorage.getItem("user_id");
 const gridNumber = ref(6);
 const liveDevices = ref([]);
 const socketConnection = ref(null);
-// const connection = {
-//   clean: true,
-//   connectTimeout: 30 * 1000,
-//   reconnectTimeout: 4000,
-//   keepAlive: 120,
-//   clientId: 'lens_3DtlcZfxvR0idKzXQ90Vzm69vAM',
-//   username: 'MYsmO5Oc7O6DKkS8',
-//   password: 'ufUPnVWbLoMwwFaL',
-//   useSSL: true,
-// };
+const connection = reactive({
+  clean: true,
+  connectTimeout: 30 * 1000,
+  reconnectTimeout: 4000,
+  keepAlive: 120,
+  clientId: "lens_3DtlcZfxvR0idKzXQ90Vzm69vAM",
+  username: "MYsmO5Oc7O6DKkS8",
+  password: "ufUPnVWbLoMwwFaL",
+  useSSL: true,
+});
 const subscribeSuccess = ref(false);
 const connecting = ref(false);
 const retryTimes = ref(0);
 
 const store = useStore();
+const { lgAndUp } = useDisplay();
 
 const showGrid = ref(`lg${gridNumber.value}`);
-const mobile = ref(store.state.vuetify.breakpoint.lgAndUp);
+const mobile = ref(store.state.lgAndUp);
 
 const initData = () => {
   socketConnection.value = {
@@ -77,8 +79,7 @@ watch(
 
     const { ...options } = connection;
     const connectUrl = "wss://accu.live/ws/";
-    let connection = await mqtt.connect(connectUrl, options);
-    socketConnection.value = connection;
+    socketConnection.value = await mqtt.connect(connectUrl, options);
 
     for (let i = 0; i < liveDevices.value.length; i++) {
       const element = liveDevices.value[i];
@@ -98,6 +99,7 @@ watch(
       socketConnection.value.on("error", (error) => {
         console.log("Connection failed", error);
       });
+
       socketConnection.value.on("message", async (_, message) => {
         let data = await JSON.parse(message);
         if (data?.msg_id === 17) {
@@ -159,8 +161,8 @@ watch(
         >mdi-tally-mark-1</v-icon
       >
     </div>
-    <v-layout row wrap class="mt-4">
-      <v-flex
+    <v-row row wrap class="mt-4">
+      <v-col
         d-flex
         xs12
         sm12
@@ -205,12 +207,11 @@ watch(
           <v-row>
             <v-col cols="12" sm="6" md="6" lg="6" xl="4">
               <v-card class="d-flex align-center pa-2 mt-4">
-                <v-flex>
+                <v-col>
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template v-slot:activator="{ props }">
                       <v-img
-                        v-on="on"
-                        v-bind="attrs"
+                        v-bind="props"
                         src="@/assets/heartbeat.svg"
                         height="40"
                         width="40"
@@ -219,8 +220,8 @@ watch(
                     </template>
                     <span>Heart Rate</span>
                   </v-tooltip>
-                </v-flex>
-                <v-flex xs12>
+                </v-col>
+                <v-col xs12>
                   <div class="d-flex flex-column text-start ml-2 lh-1">
                     <h5 class="green--text">
                       {{
@@ -233,17 +234,16 @@ watch(
                     </h5>
                     <small class="">BPM</small>
                   </div>
-                </v-flex>
+                </v-col>
               </v-card>
             </v-col>
             <v-col cols="12" sm="6" md="6" lg="6" xl="4">
               <v-card class="d-flex align-center pa-2 mt-4">
-                <v-flex>
+                <v-col>
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template v-slot:activator="{ props }">
                       <v-img
-                        v-on="on"
-                        v-bind="attrs"
+                        v-bind="props"
                         src="@/assets/oxygen.svg"
                         height="40"
                         width="40"
@@ -252,8 +252,8 @@ watch(
                     </template>
                     <span>Oxygen</span>
                   </v-tooltip>
-                </v-flex>
-                <v-flex xs12>
+                </v-col>
+                <v-col xs12>
                   <div class="d-flex flex-column text-start ml-2 lh-1">
                     <h5 class="yellow--text">
                       {{
@@ -266,17 +266,16 @@ watch(
                     </h5>
                     <small class="">%</small>
                   </div>
-                </v-flex>
+                </v-col>
               </v-card>
             </v-col>
             <v-col cols="12" sm="6" md="6" lg="6" xl="4">
               <v-card class="d-flex align-center pa-2 mt-4">
-                <v-flex>
+                <v-col>
                   <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
+                    <template v-slot:activator="{ props }">
                       <v-img
-                        v-on="on"
-                        v-bind="attrs"
+                        v-bind="props"
                         src="@/assets/temprature.svg"
                         height="40"
                         width="40"
@@ -285,8 +284,8 @@ watch(
                     </template>
                     <span>Temperature</span>
                   </v-tooltip>
-                </v-flex>
-                <v-flex xs12>
+                </v-col>
+                <v-col xs12>
                   <div class="d-flex flex-column text-start ml-2 lh-1">
                     <h5 class="text-danger">
                       {{
@@ -299,13 +298,13 @@ watch(
                     </h5>
                     <small class="">°C</small>
                   </div>
-                </v-flex>
+                </v-col>
               </v-card>
             </v-col>
           </v-row>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

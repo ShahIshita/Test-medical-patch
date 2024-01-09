@@ -327,7 +327,7 @@ const focusDate = () => {
             min-width="290px"
             max-width="290px"
           >
-            <template v-slot:activator="{ on }">
+            <template v-slot:activator>
               <v-text-field
                 label="Date Of Birth"
                 readonly
@@ -336,7 +336,6 @@ const focusDate = () => {
                 @focus="focusDate"
                 filled
                 dense
-                v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker

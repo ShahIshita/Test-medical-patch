@@ -76,7 +76,6 @@ const mutations = {
   },
 
   SET_ALL_PATIENT(state,patients) {
-    console.log(patients)
     state.patientsData = patients.map((patient) => ({
       id: patient.userId,
       firstName:
@@ -192,7 +191,6 @@ const actions = {
   async getAllPatientsData({ commit }, id) {
     commit("SET_LOADING_STATUS", true);
     const res = await doctors.getAllPatientsData(id);
-    console.log(res.data.data)
     if (res.status === 200) {
       commit("SET_ALL_PATIENT", res.data.data);
       commit("SET_LOADING_STATUS", false);

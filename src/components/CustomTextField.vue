@@ -11,12 +11,13 @@ const props = defineProps([
   "type",
   "hidden",
   "value",
+  "modelValue",
 ]);
 
-const emit = defineEmits(["blur"]);
+const emit = defineEmits(["update:modelValue"]);
 
 const handleInput = (value) => {
-  emit("blur", value);
+  emit("update:modelValue", value);
 };
 
 const hasErrors = ref(props.errors?.length > 0 || false);
@@ -32,9 +33,9 @@ const hasErrors = ref(props.errors?.length > 0 || false);
       :type="type"
       :rules="fieldRules"
       :placeholder="placeholder"
-      :value="value"
+      :value="modelValue"
       required
-      @input="handleInput"
+      @update:modelValue="handleInput"
     ></v-text-field>
   </div>
 </template>

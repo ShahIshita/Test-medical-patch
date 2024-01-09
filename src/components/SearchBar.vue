@@ -8,6 +8,7 @@ const searchTerm = ref("");
 
 const clearSearchTerm = () => {
   searchTerm.value = "";
+  console.log(searchTerm.value);
   store.state.doctors.searchTerm = "";
 };
 </script>
@@ -19,7 +20,7 @@ const clearSearchTerm = () => {
       <input
         type="search"
         placeholder="Search by MAC Address"
-        v-model="clearSearchTerm"
+        v-model="store.state.doctors.searchTerm"
         class="pl-2 search-input"
       />
       <v-icon class="ml-2" color="warning" @click="clearSearchTerm"

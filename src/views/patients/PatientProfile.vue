@@ -41,8 +41,8 @@ onMounted(async () => {
       color="purple"
       v-if="loadingStatus"
     ></v-progress-circular>
-    <v-layout row wrap v-else>
-      <v-flex d-flex xs12 md12 sm12 lg12 class="mt-8">
+    <v-row row wrap v-else>
+      <v-col d-flex xs12 md12 sm12 lg12 class="mt-8">
         <div class="d-flex align-center profile-header" style="width: 100%">
           <div class="d-flex align-center">
             <div class="flex-shrink-0">
@@ -78,9 +78,9 @@ onMounted(async () => {
             </v-btn>
           </div>
         </div>
-      </v-flex>
+      </v-col>
 
-      <v-flex d-flex xs12 sm12 md6>
+      <v-col d-flex xs12 sm12 md6>
         <div class="card-light w-100 pb-4">
           <h4 class="text-left text-h5 font-weight-bold mb-5" style="color: #f58220">
             {{ role !== "Admin" ? "Patient Info" : "Doctor Info" }}
@@ -181,9 +181,9 @@ onMounted(async () => {
             </v-col>
           </v-row>
         </div>
-      </v-flex>
+      </v-col>
 
-      <v-flex d-flex xs12 sm12 md6>
+      <v-col d-flex xs12 sm12 md6>
         <div
           class="card-light w-100 pb-4"
           v-if="getSinglePatientData[0]?.familyMembers.length > 0 && role !== 'Admin'"
@@ -216,9 +216,9 @@ onMounted(async () => {
             </v-col>
           </v-row>
         </div>
-      </v-flex>
+      </v-col>
 
-      <v-flex d-flex xs12 sm12 md6>
+      <v-col d-flex xs12 sm12 md6>
         <div class="card-light w-100 pb-4" v-if="role !== 'Admin'">
           <h4 class="text-h5 font-weight-bold text-left mb-5" style="color: #f58220">
             Medical Info
@@ -286,8 +286,8 @@ onMounted(async () => {
             </v-col>
           </v-row>
         </div>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

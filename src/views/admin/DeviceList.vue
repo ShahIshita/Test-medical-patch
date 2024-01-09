@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, reactive } from "vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { useStore } from "vuex";
@@ -32,10 +32,13 @@ const headers = [
   { title: "Actions", key: "actions", sortable: false },
 ];
 
-const editedIndex = ref(-1);
-const editedItem = ref({ name: "" });
+// const editedIndex = ref(-1);
+const editedIndex = ref(null);
+const editedItem = reactive({});
+// const dialog = ref(false);
+const itemId = ref(null);
 const defaultItem = { name: "", macAddressFramed: "" };
-let itemId = "";
+// let itemId = "";
 const addDialog = ref(false);
 const assignDevicePatientDialog = ref(false);
 const assignDeviceDoctorDialog = ref(false);
@@ -61,7 +64,7 @@ const selected = ref([]);
 const selectedHeadersPatient = ref({});
 let isValidAssignDoctor = ref(false);
 let isValidAssignPatient = ref(false);
-const data = ref();
+const confirm = ref();
 
 // const toast = Toast.useToast();
 
@@ -70,20 +73,26 @@ const getAllDevices = async () => {
 };
 
 const deleteSingleDevice = async (item) => {
-  if (await data.value.confirm.open("Are you sure you want to delete this device?")) {
+  // Use window.confirm for simple confirmation
+  const isConfirmed = window.confirm("Are you sure you want to delete this device?");
+
+  if (isConfirmed) {
     try {
+      // Perform deletion only if the user clicks "OK"
       const data = await store.dispatch("devices/deleteDevice", item);
       if (data.statusCode === 200) {
         toast.success(data.message, { timeout: 3000 });
-      }
-    } catch (err) {
-      setTimeout(async () => {
+
+        // Refresh the data after successful deletion
         await getAllDevices();
         getDevices.value = store.getters["devices/getDevices"];
-      }, 500);
+      }
+    } catch (err) {
       toast.error(err.message, { timeout: 3000 });
     }
   }
+
+  // Close the dialog in any case
   dialogDelete.value = true;
 };
 
@@ -96,9 +105,14 @@ const focusDate = () => {
 };
 
 const editDevice = (item) => {
-  editedIndex.value = getDevices.indexOf(item);
-  itemId = item.id;
-  editedItem.value = { ...item };
+  if (!Array.isArray(getDevices.value)) {
+    console.error("getDevices is not an array");
+    return; // Exit the function if getDevices is not an array
+  }
+
+  editedIndex.value = getDevices.value.indexOf(item);
+  itemId.value = item.id !== undefined ? item.id : null;
+  Object.assign(editedItem, item); // Update properties of editedItem
   dialog.value = true;
 };
 
@@ -251,8 +265,8 @@ onMounted(async () => {
 
 <template>
   <div>
-    <PageHeader title="Device List" pageIcon="mdi-arrow-left" @goBack="router.go(-1)" />
     <SideBar />
+    <PageHeader title="Device List" pageIcon="mdi-arrow-left" @goBack="router.go(-1)" />
     <div class="text-right mb-5">
       <v-btn
         color="warning"
@@ -319,7 +333,7 @@ onMounted(async () => {
                 min-width="290px"
                 max-width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template v-slot:activator>
                   <v-text-field
                     class="input-theme"
                     label="Manufacture Month"
@@ -327,7 +341,6 @@ onMounted(async () => {
                     hide-details
                     :value="device.dateValue"
                     @focus="focusDate"
-                    v-on="on"
                   ></v-text-field>
                 </template>
                 <v-date-picker

@@ -11,7 +11,7 @@ import useSearch from "@/composable/searchUser";
 const { searchUserString, searchUser } = useSearch();
 const router = useRouter();
 const store = useStore();
-const data = ref(null);
+const confirm = ref(null);
 const getPatientsData = ref([]);
 const getDoctorId = localStorage.getItem("user_id");
 const role = localStorage.getItem("role");
@@ -20,10 +20,12 @@ const loadingStatus = store.getters.loadingStatus;
 const getAllPatientsOnly = store.getters.getAllPatientsOnly;
 
 const getAllPatientsData = async () => {
-  await store.dispatch("doctors/getAllPatientsData");
-  // await store.dispatch("doctors/deletePatient");
+  await store.dispatch("doctors/getAllPatientsData", getDoctorId);
 };
 
+const deletePatient = () => {
+  store.dispatch("doctors/deletePatient");
+};
 const headers = [
   {
     title: "Patient Image",
@@ -48,33 +50,33 @@ const addPatient = () => {
 };
 
 const deleteSinglePatient = async (item) => {
-  if (await data.value.confirm.open("Are you sure you want to delete this patient?")) {
-    try {
-      const data = await deletePatient(item);
-      if (data.statusCode === 200) {
-        setTimeout(async () => {
-          await getAllPatientsData(getDoctorId);
-          getPatientsData.value = store.getters["doctors/getPatientsData"];
-        }, 500);
-        dialogDelete.value = true;
-        toast.success(data.message, { timeout: 3000 });
-      }
-    } catch (err) {
-      console.error(err);
-      setTimeout(async () => {
-        await getAllPatientsData(getDoctorId);
-        getPatientsData.value = store.getters["doctors/getPatientsData"];
-      }, 500);
-      toast.error(err.message, { timeout: 3000 });
-      dialogDelete.value = true;
-    }
-  }
+  confirm.value.addEventListener("open", () => console.log("Event happened"));
+  // if (await confirm.open("Are you sure you want to delete this patient?")) {
+  //   try {
+  //     const data = await deletePatient(item);
+  //     if (data.statusCode === 200) {
+  //       setTimeout(async () => {
+  //         await getAllPatientsData(getDoctorId);
+  //         getPatientsData.value = store.getters["doctors/getPatientsData"];
+  //       }, 500);
+  //       dialogDelete.value = true;
+  //       toast.success(data.message, { timeout: 3000 });
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     setTimeout(async () => {
+  //       await getAllPatientsData(getDoctorId);
+  //       getPatientsData.value = store.getters["doctors/getPatientsData"];
+  //     }, 500);
+  //     toast.error(err.message, { timeout: 3000 });
+  //     dialogDelete.value = true;
+  //   }
+  // }
 };
 
 onMounted(async () => {
-  await getAllPatientsData();
+  await getAllPatientsData(getDoctorId);
   getPatientsData.value = store.getters["doctors/getPatientsData"];
-  console.log(store);
 });
 </script>
 

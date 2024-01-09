@@ -2,13 +2,7 @@
 import ApexCharts from "apexcharts";
 import { ref, onMounted, watch, onBeforeUnmount, defineProps } from "vue";
 
-const props = defineProps(
-  "height",
-  "width",
-  "chartBgColor",
-  "chartLabel",
-  "dataOfChart",
-);
+const props = defineProps("height", "width", "chartBgColor", "chartLabel", "dataOfChart");
 
 const options = ref({
   series: [
@@ -80,12 +74,11 @@ onMounted(() => {
   watch(
     () => props.dataOfChart,
     async (val) => {
-      console.log("val.length", val.length);
       const chartContainer = document.getElementById("chart");
       if (chartContainer?.innerHTML) {
         chartContainer.innerHTML = null;
       }
-      if (val.length && val.length > 0) {
+      if (val?.length && val.length > 0) {
         if (document.getElementById("chart")) {
           myAreaChart = new ApexCharts(chartContainer, options.value);
           myAreaChart.render();
@@ -97,7 +90,7 @@ onMounted(() => {
         }
       }
     },
-    { immediate: true },
+    { immediate: true }
   );
 });
 
